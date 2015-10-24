@@ -1,0 +1,11 @@
+CACHE MANIFEST
+
+CACHE:
+/favicon.ico
+
+NETWORK:
+/bin/downloads/
+/bin/videos/
+
+FALLBACK:
+* /offline.html

@@ -1,0 +1,75 @@
+/*	common320.css
+Made by Michael duPont
+768 Pixel Layout Style Sheet (iPad)
+Extends common.css
+Primary Scheme:
+	1435AD  Main
+	2C3E82	Dark Dull
+	071D70	Dark Full
+	4867D6	Light Full
+	6E84D6	Light Dull
+Specials:
+	313B61	Header Text
+*/
+
+#Background
+{
+	display : none;
+}
+
+#BackgroundHeader
+{
+	display : none;
+}
+
+#wrap
+{
+	margin : auto 0;
+	width : 100%;
+}
+
+#TitleBar
+{
+	height : 120px;
+	left : 0;
+	position : absolute;
+	top : 0;
+	width : 100%;
+}
+
+#Title
+{
+	top : 8px;
+	width : 350px;
+	font-size : 48px;
+}
+
+#SubTitle
+{
+	top : 76px;
+	left : 65px;
+	font-size : 28px;	
+}
+
+Nav
+{
+	height : 0;
+	left : 0;
+	position : absolute;
+	top : 120px;
+	width : 100%;
+}
+
+Nav li a
+{
+	font-size : 24px;
+	line-height : 50px;
+}
+
+Article
+{
+	left : -10px;
+	top : 162px;
+	width : 90%;
+	padding : 0px 30px 0px 30px;
+}

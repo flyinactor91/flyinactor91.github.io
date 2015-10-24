@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<head>
+	<title>MduP Rock Paper Scissors</title>
+	<meta name = "Author" content = "Michael duPont"/>
+	<meta name = "Description" content = "Rock Paper Scissors Javascript Test"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes"/>
+	<link rel="icon" type="image/png" href="favicon.png">
+	<link rel="stylesheet" href="CSS/common.css" type="text/css" />
+	<link rel="stylesheet" href="CSS/common768.css" type="text/css" media="screen and (max-device-width: 768px)" />
+	<link rel="stylesheet" href="CSS/common320.css" type="text/css" media="screen and (max-device-width: 320px)" />
+	<link rel="stylesheet" href="CSS/RPSStyle.css" type="text/css" />
+	<script type="text/javascript" src="JS/RPSScript.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+</head>
+
+<body>
+	<div id="Background"></div>
+	<div id="BackgroundHeader"></div>
+	<div id="wrap">
+		<Header>
+			<Section id="TitleBar">
+				<a href="http://flyinactor91.com" style="text-decoration:none" id="Title">Michael duPont</a>
+				<p id="SubTitle">flyinactor91</p>
+			</Section>
+			<Nav>
+				<li><a>Rock</a></li>
+				<li><a style="background : #1435AD; color : white;">Paper</a></li>
+				<li><a>Scissors</a></li>
+			</Nav>
+		</Header>
+		<Article>
+			<p>My first web-based project. A very simple Javascript RPS game. The computer throws completely at random.</p>
+			
+			<div id="play">
+				<div id="playerArea">
+					<label for="playerOutput">Player</label>
+					<input id="playerOutput" value="" size="8" />
+				</div>
+				<div id="computerArea">
+					<label for="computerOutput">Computer</label>
+					<input id="computerOutput" value="" size="8" />
+				</div>
+				<div id="resultArea">
+					<label for="resultOutput">Results</label>
+					<input id="resultOutput" value="" size="34" />
+				</div>
+				<div id="choices">
+					<button id="rock" onclick="determineResult('rock')">Rock</button>
+					<button id="paper" onclick="determineResult('paper')">Paper</button>
+					<button id="scissors" onclick="determineResult('scissors')">Scissors</button>
+				</div>
+			</div>
+			
+			<div id="counter">
+				<p>Results:</p>
+				<div id="playTLoc">
+					<label for="playerTally">Player</label>
+					<input id="playerTally" value="0" size="3" />
+				</div>
+				<div id="compTLoc">
+					<label for="computerTally">Computer</label>
+					<input id="computerTally" value="0" size="3" />
+				</div>
+				<div id="drawTLoc">
+					<label for="drawTally">Draw</label>
+					<input id="drawTally" value="0" size="3" />
+				</div>
+				<div id="gamesTLoc">
+					<label for="gamesTally">Total Games</label>
+					<input id="gamesTally" value="0" size="3" />
+				</div>
+				<button id="reset" onclick="reset()">Reset</button>
+			</div>
+
+		</Article>
+		<Footer>
+			<h3>Hi. I'm a footer</h3>
+		</Footer>
+	</div>
+</body>
+</html>
+

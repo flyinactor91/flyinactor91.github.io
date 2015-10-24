@@ -1,0 +1,157 @@
+a {
+    color: #5833b7;
+}
+
+a:hover, a:focus {
+    color: #3b227a;
+}
+
+.navbar {
+    margin-bottom: 0px;
+    min-height: 45px;
+}
+
+.navbar li {
+    display: inline;
+}
+
+.navbar .breadcrumb {
+    margin-bottom: 0px;
+}
+
+.jumbotron {
+    background-color: #c9f;
+}
+
+#subnav {
+    background-color: #c9f;
+}
+
+#taboc {
+    margin-left: 0px;
+    border-color: #ccc;
+    border-width: 1px;
+    border-radius: 8px;
+    border-style: solid;
+    padding: 5px;
+    width: 100%;
+    font-weight: bold;
+}
+
+#totop {
+    font-size: 24px;
+    color: #ccc;
+}
+
+#link-row {
+    text-align: center;
+    margin: 10px auto;
+}
+
+#link-block div {
+    background-color: #c9f;
+    height: 100px;
+    border-radius: 8px;
+}
+
+#link-block h1 {
+    text-align: center;
+    padding-top: 30px;
+}
+
+#info-panels {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.panel {
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.panel-primary {
+    border-color: #c9f;
+}
+
+.panel-primary > .panel-heading {
+    color: #fff;
+    background-color: #c9f;
+    border-color: #c9f;
+    font-weight: bold;
+}
+
+.vid-leveler {
+    margin-top: 20px;
+}
+
+.img-leveler {
+    margin-top: 20px;
+}
+
+.code {
+    font-family: 'Source Code Pro';
+}
+
+.center-text {
+    text-align: center;
+}
+
+.no-border {
+    border: none;
+}
+
+#def-color {
+    background-color: #c9f;
+}
+
+.embed-responsive {
+    margin-bottom: 10px;
+}
+
+.well {
+    background-color: #ebdfff;
+    border-color: #c9f;
+    padding: 13px;
+}
+
+.well h3 {
+    margin-top: 0px;
+}
+
+.well .img-thumbnail {
+    margin-bottom: 10px;
+}
+
+.well p {
+    margin-bottom: 0px;
+}
+
+.well-list {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.masonry .row {
+    -moz-column-width: 18em;
+    -webkit-column-width: 18em;
+    -moz-column-gap: 1em;
+    -webkit-column-gap:1em;
+}
+
+.masonry .row > * {
+ display: inline-block;
+ padding:  .12rem;
+ width:  100%; 
+ float:none;
+}
+
+.masonry .well {
+ position:relative;
+ display: block;
+    margin-bottom: 5px;
+}
+
+footer {
+    margin-top: 12px;
+    height: 8px;
+}

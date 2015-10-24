@@ -1,0 +1,15 @@
+9
+
+Log Entries:
+
+Entry Num	Access Date			User Text
+
+1		Mon, 15-Oct-2012 20:07:00 EST	MduP Test One
+2		Mon, 15-Oct-2012 20:07:19 EST	MduP Test Two
+3		Mon, 15-Oct-2012 22:22:04 EST	MduP iPad
+4		Mon, 15-Oct-2012 23:31:32 EST	Casey
+5		Tue, 16-Oct-2012 14:46:57 EST	Zach
+6		Sun, 11-Nov-2012 06:59:52 EST	Squonk
+7		Sun, 11-Nov-2012 07:03:39 EST	Squonk 2
+8		Sun, 11-Nov-2012 07:04:33 EST	Hello 3
+9		Sun, 02-Dec-2012 12:14:29 EST	Michael

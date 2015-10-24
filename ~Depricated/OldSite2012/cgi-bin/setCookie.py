@@ -1,0 +1,72 @@
+#!/usr/bin/python
+
+import os
+import cgi
+import cgitb
+import time
+import random
+
+cgitb.enable()
+
+##--Get text input--##
+form = cgi.FieldStorage()
+inputTxt = form["theText"].value
+if (inputTxt == "" or inputTxt == " "):
+    inputTxt = "[no text given]"
+
+##--Record visit on server--##
+fin = open("cookieRecord.txt" , "r+")
+recordCount = int(fin.readline())
+recordCount += 1
+fin.seek(0)
+fin.write(str(recordCount))
+fin.seek(0,2)
+fin.write("\n"+str(recordCount)+"\t\t"+str(time.strftime("%a, %d-%b-%Y %T EST"))+"\t"+inputTxt)
+fin.close()
+
+##--create cookie--##
+expires = time.time() + 14 * 24 * 3600
+cookieOutput = "Set-Cookie: MduP_lastvisit=" + str(time.asctime(time.localtime())) + "; session=" + str(random.randint(1,1000000)) +  "; Domain=.turing.centre.edu; expires=" + str(time.strftime("%a, %d-%b-%Y %T EST", time.gmtime(expires))) + "; path=/~michael.dupont/cgi-bin"
+
+print "Content-Type: text/plain"
+print cookieOutput
+
+
+print "Content-Type: text/html\n"
+##--End HTTP header--##
+
+print "<html><body>"
+##--If cookie is not found--##
+if not os.environ.get("HTTP_COOKIE"):
+    print "<h1>Welcome to the site</h1>"
+
+##--If cookie is found--##
+else:
+    cookieList = os.environ["HTTP_COOKIE"].split(';')
+    #cookieString = cookieList[0]
+    for cook in cookieList:
+        if cook[0:4] == "MduP":
+            cookieString = cook
+    print "<h1>Welcome back to the site</h1>"
+    print "<h2>You last accessed this site on " , cookieString[cookieString.find('=')+1:len(cookieString)] , "</h2>"
+
+##--Body--##
+
+print "<h3>Thank you for your text. It has been saved to the server.</h3>"
+print "<h3>You are visitor number " , recordCount , "</h3>"
+print "<HR>\n<P>\n"
+##--Report--##
+if os.environ.get("HTTP_COOKIE"):
+    if cookieList:
+        for cookie in cookieList:
+            if cookie != cookieString:
+                print "<p>Cookies script ignored: " + cookie + "</p>"
+    if cookieString:
+        print "<p>The following cookie was used: " , cookieString , "</p>"
+print "<p>The text of the cookie I just set: " , cookieOutput , "</p>"
+
+print "<HR>\n<P>\n"
+print """<A HREF="http://turing.centre.edu/~michael.dupont/bin/setCookie.txt" target=_blank>Click here</A> to see a text file containing the script\n"""
+print"</P>\n"
+
+print "</body></html>"

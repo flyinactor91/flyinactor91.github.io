@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://mdupont.com">
+
+<head>
+    <!--META-->
+    <title>MduP Raspberry Pi Initial Setup</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:600' rel='stylesheet' type='text/css'>
+    
+    <!--SCRIPT-->
+</head>
+
+<body>
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B6F45" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)   [0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B6F45');</script>
+    <!-- End Google Tag Manager -->
+    
+    <nav id="topnav" class="navbar">
+        <div class="container">
+            <div class="row">
+                <ol class="breadcrumb pull-left">
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Blog</a></li>
+                    <li class="active">Raspberry Pi</li>
+                    <li class="active">Initial Setup</li>
+                </ol>
+                <ul class="nav nav-pills pull-right">
+                    <!--<li><a href="#">About</a></li>-->
+                    <li><a href="../../about.html">About / Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="subnav">
+        <div class="container">
+            <h4>Michael duPont - mdupont.com</h4>
+        </div>
+    </div>
+    
+    <article class="container">
+        <h1 id="title-bar">Raspberry Pi Initial Setup</h1>
+	   
+        <div id="taboc">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" class="active"><a href="#taboc" name="taboc" id="def-color">Contents</a></li>
+                <li role="presentation"><a href="#Materials">Materials</a></li>
+                <li role="presentation"><a href="#Distros">Select Distro</a></li>
+                <li role="presentation"><a href="#Prepare">SD Card</a></li>
+                <li role="presentation"><a href="#First">First Boot</a></li>
+                <li role="presentation"><a href="#Update">Updating etc</a></li>
+                <li role="presentation"><a href="#atBoot">Easy atBoot</a></li>
+                <li role="presentation"><a href="#Back">Back Up</a></li>
+                <li role="presentation"><a href="#Resources">Resources</a></li>
+            </ul>
+        </div>
+	   
+        <div>
+            <a name="Materials"></a>
+            <h2>Materials <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>I recommend using one of the two kits below from Adafruit. Which one you should choose depends on the nature of your IoT project.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class=" well well-list">
+                        <div class="img-thumbnail">
+                            <img src="https://www.adafruit.com/images/1200x900/2380-02.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h3><a href="http://www.adafruit.com/products/2380" target="_blank" >Raspberry Pi 2 Model B Starter Pack</a></h3>
+                            <p>If you've never used a Raspberry Pi before, go with this kit. This kit contains everything you need to begin using the Pi with both Internet and hardware projects. The included electronic components allow you to follow Adafruit's <a href="https://learn.adafruit.com/category/learn-raspberry-pi" target="_blank"><i>Getting Started with Raspberry Pi</i></a> learning tutorials.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class=" well well-list">
+                        <div class="img-thumbnail">
+                            <img src="https://www.adafruit.com/images/1200x900/1406-00.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h3><a href="http://www.adafruit.com/products/1406" target="_blank">Onion Pi Pack w/Large Antenna</a></h3>
+                            <p>This kit contains just the things you need to get an Internet-connected Pi project up and running. The included SD is pre-loaded with a version of Raspbian with router and Tor proxy software, but you can always format and reinstall the distro you want.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <a name="Distros"></a>
+            <h2>Selecting a Distro <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>The Raspberry Pi is capable of running a large number of operating systems. The Embedded Linux Wiki maintains a <a href="http://elinux.org/RPi_Distributions" target="_blank">comprehensive list of distros for the Pi</a>. However, the folks at the <a href="https://raspberrypi.org" target="_blank">Raspberry Pi Foundation</a> host the most popular versions and the installer on their <a href="http://www.raspberrypi.org/downloads/" target="_blank">downloads page</a>. If you want to keep things simple, go ahead and download <a href="http://downloads.raspberrypi.org/NOOBS_latest">NOOBS (New Out Of Box Software) with Raspbian included</a> and skip to the next section. If you don't even want to do that, you can <a href="">buy SD cards with the same software pre-installed</a>. There is a second version called <a href="http://downloads.raspberrypi.org/NOOBS_lite_latest">NOOBS-lite</a> that does not include Raspbian which is used to download and install any of the officially supported distros. The advantages of using this is that the vanilla installer is much smaller in terms of disk space and the Pi will always install an up-to-date version of the desired distro. However, the Pi will need to be connected to the internet (either WiFi or Ethernet) in order to download the distro in-place.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class=" well well-list">
+                        <div class="img-thumbnail">
+                            <img src="../../bin/img/raspbian-logo.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h3><a href="https://raspbian.org" target="_blank">Raspbian</a> - <a href="http://downloads.raspberrypi.org/raspbian_latest"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span></a></h3>
+                            <p>Raspbian is a fork of Debian, the oldest and most supported version of Linux. It is the official distro from the Raspberry Pi Foundation and offers the biggest support community and hardware compatibility. Unless you need very low-level hardware access, this is the distro for you.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class=" well well-list">
+                        <div class="img-thumbnail">
+                            <img src="../../bin/img/pidora-logo.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h3><a href="https://pidora.ca" target="_blank">Pidora</a> - <a href="http://downloads.raspberrypi.org/pidora_latest"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span></a></h3>
+                            <p>Pidora is a Fedora Remix built for the Raspberry Pi. Fedora is supported by Red Hat and constantly kept up-to-date with the bleeding edge of technology. It offers some of the best security software, but is not great for long-term IoT projects since each version is only supported for 13 months after its initial release.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class=" well well-list">
+                        <div class="img-thumbnail">
+                            <img src="../../bin/img/risc-os-logo.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h3><a href="https://www.riscosopen.org/wiki/documentation/show/Welcome%20to%20RISC%20OS%20Pi" target="_blank">RISC OS - <a href="http://downloads.raspberrypi.org/riscos_latest"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span></a></a></h3>
+                            <p>Unlike the majority of OS's made for the Raspberry Pi, RISC OS is not based on Linux or Unix. It was the first ARM-based OS and built by the same developers who made the ARM chip-set. There are very few layers between the software and hardware allowing developers to write very fast, low-level code. It's also very small and "moves out of the way" when running your applications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>With the release of the new Raspberry Pi version 2, Microsoft and Canonical have announced they intend to release versions of their own operating systems, Windows and Ubuntu respectively, to run on the updated hardware. Snappy Ubuntu Core is already available on the downloads page.</p>
+        </div>
+        
+        <div>
+            <a name="Prepare"></a>
+            <h2>Prepare SD Card <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>When choosing your SD card for the Pi, you need only worry about capacity and form, not the manufacturer. My recommendation is a 16GB Micro-SD card with a Micro-to-Standard adapter. The minimum recommended capacity is 4GB, but that leaves less than 2GB for programs and media storage. With 16GBs, you won't ever have to worry about running out of space (for normal use cases). As for the form, the A+, B+, and B2 all use Micro-SD card slots whereas the A and B use standard. Having a Micro SD and adapter allow you to use the OS with any version and makes it far more likely that you can set up the SD card with your own computer.</p>
+            <div class="alert alert-danger">
+                <p><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Formatting a disk erases all of its contents! Take care that you don't start erasing your own computer!</p>
+            </div>
+            <p>Whether or not there's anything currently on it, you should always format the SD card before installing your chosen OS. While not true for every distro, most say to use the FAT32 (File Allocation Table) format. In addition, you should choose the "slow" method (overwrite with zeros) if the option is available. For Windows, I recommend using <a href="https://www.sdcard.org/downloads/formatter_4/" target="_blank">SD Formatter</a> from the SD Association. Mac and Linux have their own Disk Utility / Disks which do a great job. If you have a Mac, however, I recommend using the program I mention below.</p>
+            <p>If you downloaded either version of NOOBS, all you need to do is copy all of the downloaded folder's contents onto the SD card and eject it. If you'd rather install the OS without NOOBS or it is not supported by NOOBS, <a href="http://www.raspberrypi.org/documentation/installation/installing-images/" target="_blank">go here to read the Raspberry Pi Foundation's installation guide</a>. They have instructions for Linux, Mac, and Windows. If you use a Mac, however, I highly recommend using a free program called <a href="http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/" target="_blank">ApplePi Baker</a>. It provides an easy graphical interface to format SD cards, install your OS, and back up your current image all tailored for the Raspberry Pi.</p>
+            <p>Once your OS is installed, it's time to boot and configure your new OS.</p>
+        </div>
+        
+        <div>
+            <a name="First"></a>
+            <h2>First Boot <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>First off, there are two primary ways of interacting with the Pi upon first boot. The first way is using a USB keyboard and connecting the Pi to a display with an HDMI cable. The second way is using a USB console cable with the GPIO pins and your laptop. This allows you to use your computer's keyboard and screen to interact with the Pi. If you don't know how to use a console cable, Adafruit has a <a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable" target="_blank">quick tutorial on using a console cable with the Pi</a>. There's a third way which lets you SSH into the Pi if it's connected to your network via Ethernet, but you should only use it if the other two options are not available. I would also recommend not changing any files (like wpa_supplicant for WiFi) before expanding the disk during setup.</p>
+            <div class="alert alert-info">
+                <p><span class="glyphicon glyphicon-info-sign"></span> From this point on, all of the screenshots and setup specifics are for Raspbian and other Debian-based distros.</p>
+            </div>
+            <p>Upon first boot, the Pi should display the screen shown below. This program is included in most, if not all, RasPi distros. If you get a login prompt instead, the default username/password combo is pi/raspberry. Then enter <span class="code">sudo raspi-config</span> on Raspbian. Pidora has a similar config tool called <span class="code">firstboot</span>.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig1.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>1 Expand</h4>
+                            <p>The first step is to expand the file system so that the OS can use all of the SD card.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig2.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>2 Change Password</h4>
+                            <p>It's hard to change the username, but it's easy to change the password. This is the fundamental level of security for your Pi. Another person could easily hijack your Pi if the default password is still in place</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig3.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>3 Boot Style</h4>
+                            <p>The default UI is a terminal prompt. If you'd rather have the desktop always show, change it here. Enabling boot-to-desktop is not necessary to run GUI interfaces at boot.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig42.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>4.2 Timezone</h4>
+                            <p>I've found it's not necessary to change the locale setting. However, it's a good idea to tell the Pi what timezone it is in.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig43.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>4.3 Keyboard</h4>
+                            <p>If you're in the US, the keyboard layout needs to be changed. It's nearly impossible to get the <span class="code">#</span> sign without doing so. There's an easier way to do this I mention below.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig5.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>5 Camera</h4>
+                            <p>Enable this if your IoT project makes use of the Pi Camera. This menu can always be reached later if you change your mind.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig7.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>7 Overclock</h4>
+                            <p>The CPU can be told to run up to 40% faster than its default. However, this introduces a greater chance of instability in the Pi and is not necessary for most long-term IoT projects. Overclocking also leads to greater power draw.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig82.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.2 Hostname</h4>
+                            <p>The Pi should have a unique hostname based on your project like "WeMo-Pi-Controller". This way you can always tell which Pi is which during a network scan or ssh session.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig83.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.3 Memory Split</h4>
+                            <p>While not recommended for most cases, you might have to allocate more memory for the GPU if the Pi is performing graphics-heavy operations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig84.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.4 SSH</h4>
+                            <p>This is enabled by default. If the Pi will only be controlled via Serial or USB keyboard, disable SSH.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig86.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.6 SPI</h4>
+                            <p>If your project uses a Pi Hat or any other kind of plate, you might have to enable the SPI kernel for it to work.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig87.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.7 I2C</h4>
+                            <p>I2C ("eye squared see") is another hardware communications protocol like SPI. If you're connecting the Pi to other hardware and logic boards via the GPIO pins, I recommend enabling both.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig88.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.8 Serial</h4>
+                            <p>Allow or lock using a serial cable to control and display the Pi. Unlike SSH, accessing via serial requires physical access, so I recommend leaving this enabled.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfig89.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <h4>8.9 Audio</h4>
+                            <p>The Pi detects where to output any audio signal. However, you can force the Pi to use HDMI or the audio jack for audio output. It's useful when making a speaker system with an HDMI visualizer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>Once everything has been set, go to <span class="code">finish</span> and reboot the Pi.</p>
+        </div>
+        
+        <div>
+            <a name="Update"></a>
+            <h2>Updating etc <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Upon second boot, the Pi should show a terminal login screen or a desktop if option 3 was changed (open up a terminal window to follow along). Login with username <span class="code">pi</span> and the changed password...the password was changed, right?</p>
+            <p>If the keyboard layout couldn't be changed in raspi-config (it is the most finicky component to configure with that utility), here is the simple way to do so. We are going to open a file and change two letters; that's all it takes. Type <span class="code">sudo nano /etc/default/keyboard</span> into the terminal and a text editor should appear with a top line that says <span class="code"># KEYBOARD CONFIGURATION FILE</span>. Find the line that says <span class="code">XKBLAYOUT</span> and change its value to your keyboard's layout, ie US:"us", UK:"gb", Spanish:"es", French:"fr", German:"de", Russian:"ru". Press ctl+x to save and enter Y to confirm the save. If you got a write error, it's likely the terminal command didn't start with <span class="code">sudo</span>. The great thing about this fix is that it works on all Debian-based Linux distros including Raspbian and Ubuntu.</p>
+            <p>Next up the Pi needs to get connected to the internet. The simplest way is to connect the Pi to a router via an Ethernet cable. If the Pi doesn't need WiFi access, <a href="#atupdate">click here</a> to skip to the next section. First let's test to see if the Pi is already connected. Type <span class="code">ifconfig</span> to print the Pi's network status. We're looking for a line that contains <span class="code">inet addr:192.168.x.x</span> where 192.168.x.x is your internal IP address. If the Pi is connected via Ethernet, you'll find it under <span class="code">eth0</span>. If by wireless adaptor, <span class="code">wlan0</span>. If <span class="code">wlan0</span> doesn't have an IP address, we'll need to configure it. The easiest way to do it is via the WiFi utility found on the desktop. However, if you're stuck using a terminal, we'll need to edit a file in nano.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfigwifi1.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The specific file we need is called wpa_supplicant.conf.</p>
+                            <p class="code">sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</p>
+                            <p>Comment out '#' any lines that already exist. Note that this effectively turns off the UI WiFi config version. Of course this can always be reversed. The "network" lines shown in the screenshot will work for most setups because WPA2 is the current strongest form of encryption. Make sure to replace the ssid and password with your own. If this setup does not work for you, check out <a href="http://linux.die.net/man/5/wpa_supplicant.conf" target="_blank">this page for more configurations</a>. Now reboot the Pi with <span class="code">sudo shutdown</span> for the changes to take effect.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfigwifi2.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Once the Pi is back up, run <span class="code">ifconfig</span> again and see if you have an IP address. The screenshot shows a Pi with a wireless IP address of 192.168.1.19 . If it were connected by Ethernet, this line would instead appear in <span class="code">eth0</span>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a name="atupdate"></a>
+            <p>Now that the Pi is connected to the Internet, the first thing that should be done is bring its software up to date. This can be done with the following line:</p>
+            <p class="code">sudo apt-get update;sudo apt-get -y dist-upgrade</p>
+            <p>It's actually two commands; the upgrade will start immediately after its local repositories are updated. Depending on how long ago the most recent distro release was, this might take a while, especially if your Internet connection is slow. Once everything is done, reboot the Pi for any changes that need it.</p>
+        </div>
+        
+        <div>
+            <a name="atBoot"></a>
+            <h2>Easy atBoot <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>One of the best uses for the Pi: embedded projects. One of the hardest things to figure out: how to get your program to start at boot. Rather than trying to hack together a solution or edit system files, we can create an easy "at boot" file in the home directory using a program called Crontab. Crontab comes with Raspbian and is used to schedule events on the system. We'll use it to make a file run when the Pi boots up.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfigatboot1.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>First let's create a new Bash file in the home directory.</p>
+                            <p class="code">nano ~/atBoot.sh</p>
+                            <p>This will be the file we tell to run at start up. Rather than changing the crontab every time we want to change our project, we can instead use this atBoot.sh file. There are a few advantages to doing it this way. First, we can easily execute multiple programs. Second, we can execute terminal commands in addition to files, so it's possible for the Pi to automatically update itself on boot every time. Lastly, we'll always be able to find our atBoot.sh file because it's sitting right in the home directory. Before moving on, change its permissions so that the file can be executed.</p>
+                            <p class="code">chmod 755 ~/atBoot.sh</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/piconfigatboot2.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p class="code">sudo crontab -e</p>
+                            <p>This will open up our Crontab file. Then add this line:</p>
+                            <p class="code">@reboot sh /home/pi/atBoot.sh >/home/pi/cronlog 2>&amp;1</p>
+                            <p>The line reads: At start up, use Bash to run this file and send any prints/errors to another file</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>That's all there is to it. Now any terminal command in atBoot.sh will always run at start up. A two caveats about using this method. First, every terminal command and program run will have root permissions as it is the root user that automatically executes them. Any file or folder created by these programs will require root permissions to read and write to. Second, because the root user doesn't have a home directory, ~ extensions do not work. No problem though. Just expand the file paths yourself by replacing '~/' with '/home/pi/'. If you forget to do this, you can always use "<span class="code">sudo find / -name file.txt</span>" to find the file for you.</p>
+        </div>
+        
+        <div>
+            <a name="Back"></a>
+            <h2>Back Up <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Info here</p>
+        </div>
+        
+        <div>
+            <a name="Resources"></a>
+            <h2>Resources <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Info here</p>
+        </div>
+        
+    </article>
+    
+    <footer>
+    </footer>
+     
+</body>
+
+</html>

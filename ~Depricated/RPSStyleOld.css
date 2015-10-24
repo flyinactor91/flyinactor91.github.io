@@ -1,0 +1,18 @@
+/* ---------------- Additional Code Below Here ----------------- */
+
+#play {
+	float:left;
+}
+
+#play > * {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+#counter {
+	float:right;
+}
+
+.testingWindow {
+	height:135px;
+}

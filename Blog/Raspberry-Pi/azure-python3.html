@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://mdupont.com">
+
+<head>
+    <!--META-->
+    <title>MduP RPi Azure</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:600' rel='stylesheet' type='text/css'>
+    
+    <!--SCRIPT-->
+</head>
+
+<body>
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B6F45" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)   [0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B6F45');</script>
+    <!-- End Google Tag Manager -->
+    
+    <nav id="topnav" class="navbar">
+        <div class="container">
+            <div class="row">
+                <ol class="breadcrumb pull-left">
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Blog</a></li>
+                    <li class="active">Raspberry Pi</li>
+                    <li class="active">Python3 Azure</li>
+                </ol>
+                <ul class="nav nav-pills pull-right">
+                    <!--<li><a href="#">About</a></li>-->
+                    <li><a href="../../about.html">About / Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="subnav">
+        <div class="container">
+            <h4>Michael duPont - mdupont.com</h4>
+        </div>
+    </div>
+    
+    <article class="container">
+        <h1 id="title-bar">Connecting Raspberry Pi to Microsoft Azure with Python3</h1>
+	   
+        <div id="taboc">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" class="active"><a href="#taboc" name="taboc" id="def-color">Contents</a></li>
+                <li role="presentation"><a href="#Intro">Intro</a></li>
+                <li role="presentation"><a href="#AzureSDK">Azure SDK</a></li>
+                <li role="presentation"><a href="#CreateDB">Create DB</a></li>
+                <li role="presentation"><a href="#pyodbc">pyodbc</a></li>
+                <li role="presentation"><a href="#Testing">Testing</a></li>
+                <li role="presentation"><a href="#Resources">Resources</a></li>
+            </ul>
+        </div>
+        
+        <div>
+            <a name="Intro"></a>
+            <h2>Introduction <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>One of the best uses for the Raspberry Pi is in embedded IoT projects. For simple, linear data logging projects, all you need is to add new lines to a Google Sheet. However, there are times when you need the power of a remote database to do the hard work for you. One of the most robust options is Microsoft Azure. I'll show you how to create a new SQL database, install and configure the needed Python modules, and then test to see if everything worked. This tutorial is running on a fresh install of Raspbian-2015-02 with all updates installed as of 2015-04-02.</p>
+            <p>One note before we begin: This tutorial is for Python3, and we will use the Python3 version of pip to install the modules. I'll mention how to install the Python2 version of the modules, but I don't guarantee everything else will work the same. If you don't have Python3 pip installed, you will need to install it via apt-get with the following line:</p>
+            <p class="code">sudo apt-get install python-dev python3-dev python3-setuptools python3-pip</p>
+        </div>
+        
+        <div>
+            <a name="AzureSDK"></a>
+            <h2>Azure SDK <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Microsoft offers an official open-source Python module which you can use to tie into Azure tables and blobs among other things. If it's not necessary to have a full SQL database for your project, this is going to be the easiest way to tie into Azure. Read the reference docs in the <a href="http://azure.microsoft.com/en-us/develop/python/" target="_blank">Azure Python Dev Center</a> before moving on. The great thing about this method is that it's already configured once installed. If you are using Python3, these two lines will install everything:</p>
+            <p class="code">sudo apt-get install libffi-dev</p>
+            <p class="code">sudo pip-3.2 install azure</p>
+            <p>There's only one dependency to install before we do the pip install. Unlike the Python2 version of pip, pip is customized for each new Python version. As of the Feb2015 version of Raspbian, Python3.2 is the default, so we use pip-3.2 to install. You can install the Azure module for Python2 with apt-get:</p>
+            <p class="code">sudo apt-get install libffi-dev azure</p>
+            <p>One of the downsides of the azure module is that it doesn't include a way to access our Azure SQL databases directly. For that, continue reading.</p>
+        </div>
+        
+        <div>
+            <a name="CreateDB"></a>
+            <h2>Create SQL Database <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <div class="alert alert-warning" style="margin-top:20px; margin-bottom:0px">
+                <p><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> For the sake of clarity during this tutorial, I'm going to make a new SQL database and use the actual server name, user name, and password in plain text during module setup. By the time you read this, the server will have been deleted, so make sure you replace the tutorial data with your own.</p>
+            </div>
+            <p></p>
+            <p>The first thing we need to do is create a new SQL database. If you already have a database you want to tie into, you can do that too. If you already know your existing server name, database name, database user name, and database password, skip to the <a href="#pyodbc">next section</a>.</p>
+            
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/azuredbsetup1.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>First we create a new SQL database from the <a href="http://manage.windowsazure.com/" target="_blank">Azure Dashboard</a>. Using quick create, we supply a name for our database, a user name, and a user password when we select "New SQL database server". If you wish to connect to an existing server, this is where you can do it as long as your remember its user name and password. For this tutorial, our database name is "<b>rpitutorial</b>", user name "<b>myrpiuser</b>", and password "<b>Raspbian#1</b>".</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/azuredbsetup2.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Now that we have a new SQL database, the last thing we need is the server address the database is hosted on. Conveniently, it can be found at the bottom of the database dashboard page. For this tutorial, our server location is "<b>qcezk07lpu.database.windows.net</b>" on port "<b>1433</b>".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>At this point, we have everything we need to continue. You might want to take the time to add some data to the database using the Management portal you can access by clicking the "Management" button on the black bar at the bottom of the page. I added a new table Trivia with questions and answers.</p>
+        </div>
+        
+        <div>
+            <a name="pyodbc"></a>
+            <h2>Install pyodbc <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Now that we have a server ready to go, it's time to install and configure the Python modules. In order to do SQL queries, we're going to use pyodbc. It will give us a Python wrapper to use two other UNIX database utilities, each of which need to be individually configured. If you are unfamiliar with pyodbc, <a href="https://code.google.com/p/pyodbc/wiki/GettingStarted" target="_blank">check out its "Getting Started" guide</a>. The dependency installation is via apt-get with this line:</p>
+            <p class="code">sudo apt-get install unixodbc unixodbc-dev freetds-dev freetds-bin tdsodbc</p>
+            <p>Now that the dependencies are installed, they need to be configured.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc1.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>First we need to configure a generic connection to our server. Use</p>
+                            <p class="code">sudo nano /etc/freetds/freetds.conf</p>
+                            <p>to edit the first file. At the end of the file, add the following lines:</p>
+                            <p class="code">[rpitestsqlserver]</p>
+                            <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;host = qcezk07lpu.database.windows.net</p>
+                            <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;port = 1433</p>
+                            <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;tds version = 8.0</p>
+                            <p>You can use any name you want in those brackets as long as it doesn't contain any spaces. Use ctrl+x and then y + enter to save the file.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc2.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Now we can test to make sure the config file works. We're going to use the tsql utility. It needs the name of the configuration from the previous file, the user name (and server ID), and the password.</p>
+                            <p class="code">tsql -S rpitestsqlserver -U myrpiuser@qcezk07lpu -P Raspbian#1</p>
+                            <p>If the config file is correct, you should eventually see a prompt line like that in the screenshot above.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc3.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Before we can move on to the next config file, we need to locate two driver files, <span class="code">libtdsodbc.so</span> and <span class="code">libtdsS.so</span>, whose locations differ depending on the Linux distro. The find utility is better than grep at finding file names, but it does need root permissions to access certain root directories as shown above.</p>
+                            <p class="code">sudo find / -name libtdsodbc.so</p>
+                            <p class="code">sudo find / -name libtdsS.so</p>
+                            <p>The files should be located in the same directory, but it doesn't hurt to check. I found mine in <span class="code">/usr/lib/arm-linux-gnueabihf/odbc/</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc4.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Now we can configure the driver config file. Use nano to open the existing empty file:</p>
+                            <p class="code">sudo nano /etc/odbcinst.ini</p>
+                            <p>Add the following lines as-is unless your driver and setup locations are different:</p>
+                            <p class="code">[FreeTDS]</p>
+                            <p class="code">Description = TDS driver (Sybase/MS SQL)</p>
+                            <p class="code">Driver = /usr/lib/arm-linux-gnueabihf/odbc/libtdsodbc.so</p>
+                            <p class="code">Setup = /usr/lib/arm-linux-gnueabihf/odbc/libtdsS.so</p>
+                            <p class="code">CPTimeout =</p>
+                            <p class="code">CPReuse =</p>
+                            <p class="code">FileUsage = 1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc5.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Only one more config file. Again load it into nano:</p>
+                            <p class="code">sudo nano /etc/odbc.ini</p>
+                            <p>This file will need the config name we used in freetds.conf and the name of our database. You should give this new config name something that identifies it as using the previous config name. Here is what it looks like for this tutorial:</p>
+                            <p class="code">[rpitestsqlserverdatasource]</p>
+                            <p class="code">Driver = FreeTDS</p>
+                            <p class="code">Description = ODBC connection via FreeTDS</p>
+                            <p class="code">Trace = No</p>
+                            <p class="code">Servername = rpitestsqlserver</p>
+                            <p class="code">Database = rpitutorial</p>
+                            <p class="code">TDS_Version = 8.0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/pyodbc6.png" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Now that we have all of our dependencies configured, it's time for one final test, this time using isql. It looks similar to tsql with the -P parts missing. Just make sure that it uses the config settings we just made.</p>
+                            <p class="code">isql -v rpitestsqlserverdatasource myrpiuser@qcezk07lpu Raspbian#1</p>
+                            <p>Once your screen looks like the screenshot, everything is successfully configured. You can make a few sql queries to verify that it's working.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>After all of that, it's now time to install pyodbc. As with the Azure SDK module, we'll install it via pip for Python3.</p>
+            <p class="code">sudo pip-3.2 install pyodbc</p>
+            <p>To install it on Python2, use apt-get.</p>
+            <p class="code">sudo apt-get install pyodbc</p>
+        </div>
+        
+        <div>
+            <a name="Testing"></a>
+            <h2>Testing <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Now it is time to test our installation. Open up a python3 shell and following along with the code below. It shows me connecting to the SQL database and reading data from the table I created earlier.</p>
+            <p class="code">pi@dupRasPi:~$ python3</p>
+            <p class="code">Python 3.2.3 (default, Mar  1 2013, 11:53:50)</p>
+            <p class="code">[GCC 4.6.3] on linux2</p>
+            <p class="code">Type "help", "copyright" or "license" for more information.</p>
+            <p class="code">>>> import pyodbc  #If anything went wrong during installation, it will happen here</p>
+            <p class="code">>>> dsn = 'rpitestsqlserverdatasource'</p>
+            <p class="code">>>> user = 'myrpiuser@qcezk07lpu'</p>
+            <p class="code">>>> password = 'Raspbian#1'</p>
+            <p class="code">>>> database = 'rpitutorial'</p>
+            <p class="code">>>> </p>
+            <p class="code">>>> connString = 'DSN={0};UID={1};PWD={2};DATABASE={3};'.format(dsn,user,password,database)</p>
+            <p class="code">>>> conn = pyodbc.connect(connString)  #If anything went wrong during configuration, it will happen here</p>
+            <p class="code">>>> cursor = conn.cursor()</p>
+            <p class="code">>>> cursor.execute('select question, answer from [Trivia]')</p>
+            <p class="code">&lt;pyodbc.Cursor object at 0xb67bc9f8></p>
+            <p class="code">>>> row = cursor.fetchone()</p>
+            <p class="code">>>> if row: print(row)</p>
+            <p class="code">...</p>
+            <p class="code">('What is my favorite IoT platform?', 'The Raspberry Pi, of course!')</p>
+            <p class="code">conn.close()</p>
+            <p class="code">quit()</p>
+            <p>Now everything is working. We create the connection string, connect to the server, perform a query, read the response, and finally close the connection. Of course you can do more than just read database contents. The pyodbc module makes it easy to do anything with standard SQL queries. It will hold response data so that it's easy for you to manage whether your query returns ten rows or ten thousand.</p>
+            <p>What will you make with Azure?</p>
+        </div>
+        
+        <div>
+            <a name="Resources"></a>
+            <h2>Resources <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p><a href="http://azure.microsoft.com/en-us/develop/python/" target="_blank">Microsoft Azure Python Dev Center - http://azure.microsoft.com/en-us/develop/python/</a></p>
+            <p><a href="https://code.google.com/p/pyodbc/" target="_blank">pyodbc Python ODBC Library - https://code.google.com/p/pyodbc/</a></p>
+            <p><a href="https://iqbalnaved.wordpress.com/2013/09/19/mssql-server-connection-using-pyodbc-3-0-7-on-ubuntu-12-04/" target="_blank">MSSQL Server connection using pyodbc 3.0.7 on Ubuntu 12.04 - https://iqbalnaved.wordpress.com</a></p>
+        </div>
+        
+    </article>
+    
+    <footer>
+    </footer>
+     
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+<script language="JavaScript">
+//here you place the ids of every element you want.
+var ids=new Array('a1','a2','a3','thiscanbeanything');
+
+function switchid(id){	
+	hideallids();
+	showdiv(id);
+}
+
+function hideallids(){
+	//loop through the array and hide each element by id
+	for (var i=0;i<ids.length;i++){
+		hidediv(ids[i]);
+	}		  
+}
+
+function hidediv(id) {
+	//safe function to hide an element with a specified id
+	if (document.getElementById) { // DOM3 = IE5, NS6
+		document.getElementById(id).style.display = 'none';
+	}
+	else {
+		if (document.layers) { // Netscape 4
+			document.id.display = 'none';
+		}
+		else { // IE 4
+			document.all.id.style.display = 'none';
+		}
+	}
+}
+
+function showdiv(id) {
+	//safe function to show an element with a specified id
+		  
+	if (document.getElementById) { // DOM3 = IE5, NS6
+		document.getElementById(id).style.display = 'block';
+	}
+	else {
+		if (document.layers) { // Netscape 4
+			document.id.display = 'block';
+		}
+		else { // IE 4
+			document.all.id.style.display = 'block';
+		}
+	}
+}
+</script>
+
+<html>
+<p>Try these: <a href="javascript:switchid('a1');">show a1</a>
+<a href="javascript:switchid('a2');">show a2</a>
+<a href="javascript:switchid('a3');">show a3</a>
+<a href="javascript:switchid('thiscanbeanything');">show 'thiscanbeanything'</a></p>
+
+<hr/>
+
+	<div id='a1' style="display:block;">
+		<h2>Sample text:</h2>
+		<p><b>Jean-Paul Sartre, (1905-1980)</b> born in Paris in 1905...</p>
+	</div>
+
+	<div id='a2' style="display:none;">
+		<h3>More on JPS</h3>
+		<p>The conclusions a writer must draw from this position...</p>
+	
+	</div>
+
+	<div id='a3' style="display:none;">
+
+	
+		<p>Yet more content. This can be anything in here, html,
+		pictures.. flash ...</p>
+	</div>
+	
+	<div id='thiscanbeanything' style="display:none;">
+		<h3>This content is in a div with id "thicanbeanything"</h3>	
+			<p>Sartre is one of those writers for whom a determined...</p>
+	</div>
+</html>

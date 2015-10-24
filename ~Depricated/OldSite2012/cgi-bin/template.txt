@@ -1,0 +1,27 @@
+#!/usr/bin/python
+
+# a template for simple cgi scripting
+
+print "Content-type: text/html\n"       # set up header
+print
+
+import cgi				# need the cgi module
+
+form = cgi.FieldStorage()
+
+# YOUR CODE BEGINS
+
+
+
+# YOUR CODE ENDS __BUT__ if you use the block below 
+# for script file.py
+# cp file.py ../file.txt
+# replace ??? below with ../file.txt 
+# __ALTERNATIVELY__ just delete the 4 lines below
+
+
+# Now offer to show the script in a new window.
+# The mechanism is clunky -- keep a .txt file copy of the .py
+print "<HR>\n<P>\n"
+print """<A HREF="???" target=_blank>Click here</A> to see a text file containing the script\n"""
+print"</P>\n"

@@ -1,0 +1,11 @@
+This is a special place where hackers are permitted to make changes,
+well, actually only additions, appending their name, date, location,
+contact and info as they choose.
+
+1.	Name: Michael duPont
+	Location: Danville, KY
+	Date: 2013/01/08 (Y/M/D)
+	Contact: flyinactor91@gmail.com
+	Website: http://mdupont.com
+
+2.

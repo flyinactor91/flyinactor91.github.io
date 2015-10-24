@@ -1,0 +1,15 @@
+#play {
+	margin : 20px 0 20px 0;
+}
+
+#play > * {
+	margin : 10px 0 10px 0;
+}
+
+#counter {
+	margin : 20px 0 20px 0;
+}
+
+#counter > * {
+	margin : 4px 0 4px 0;
+}

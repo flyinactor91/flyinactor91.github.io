@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://mdupont.com">
+
+<head>
+    <!--META-->
+    <title>MduP METAR RasPi</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:600' rel='stylesheet' type='text/css'>
+    
+    <!--SCRIPT-->
+</head>
+
+<body>
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B6F45" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B6F45');</script>
+    <!-- End Google Tag Manager -->
+
+    <nav id="topnav" class="navbar">
+        <div class="container">
+            <div class="row">
+                <ol class="breadcrumb pull-left">
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Programming</a></li>
+                    <li class="active">METAR RasPi</li>
+                </ol>
+                <ul class="nav nav-pills pull-right">
+                    <!--<li><a href="#">About</a></li>-->
+                    <li><a href="../../about.html">About / Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="subnav">
+        <div class="container">
+            <h4>Michael duPont - mdupont.com</h4>
+        </div>
+    </div>
+    
+    <article class="container">
+        <h1 id="title-bar">METAR RasPi</h1>
+        
+        <div id="taboc">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" class="active"><a href="#taboc" name="taboc" id="def-color">Contents</a></li>
+                <li role="presentation"><a href="#Materials">Materials</a></li>
+                <li role="presentation"><a href="#METAR">Understanding METARs</a></li>
+                <li role="presentation"><a href="#Setup">RasPi Setup</a></li>
+                <li role="presentation"><a href="#Logic">METAR Logic</a></li>
+                <li role="presentation"><a href="#Plate">METAR Plate</a></li>
+                <li role="presentation"><a href="#Screen">METAR Screen</a></li>
+                <li role="presentation"><a href="#Resources">Resources</a></li>
+            </ul>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="embed-responsive embed-responsive-16by9 vid-leveler">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/tn1fOuBUiiI" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <a href="https://github.com/flyinactor91/METAR-RasPi" target='_blank' id="link-block">
+                    <div>
+                        <h1>GitHub</h1>
+                    </div>
+                </a>
+                <h2>Overview</h2>
+                <h4>This project uses a Raspberry Pi to display METAR weather data. METAR stands for Meteorological Aerodrome Report, and it is the primary resource pilots use to determine an airport's current weather conditions. There are almost 3,500 airports that offer METARs in the US, so it's quite likely there is one near you.</h4>
+            </div>
+        </div>
+        
+        <div>
+            <a name="Materials"></a>
+            <h2>Materials <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <div class="list-group">
+                <a href="http://www.adafruit.com/products/1406" target="_blank" class="list-group-item">1 - Raspberry Pi + Basic Components + Internet Connection<br>(this kit contains everything needed except for the screen, but you'll need to replace the .iso on the included SD card)</a>
+                <a href="http://www.adafruit.com/products/1601" target="_blank" class="list-group-item">1 - PiTFT Assembled 320x240 2.8" TFT+Touchscreen</a>
+                <a href="http://www.adafruit.com/products/1110" target="_blank" class="list-group-item">1 - RGB Negative 16x2 LCD+Keypad Kit</a>
+            </div>
+        </div>
+        
+        <div>
+            <a name="METAR"></a>
+            <h2>Understanding METARs <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>A METAR is a single string of text that contains a codified version of the weather conditions at a given airport. They are usually updated once every hour while the airport's air traffic control tower is operational. The exception is when conditions have changed significantly since the last report, eg a significant change in wind speed and/or direction. Below is an example of a real METAR:</p>
+            <p class="center-text code well">KCSV 282041Z AUTO 34006KT 1 1/2SM BR OVC002 08/07 A3006 RMK AO2 T00830067</p>
+            <ul style="margin-left: -27px">
+                <li><span class="code"><b>KCSV</b></span>: The reporting airport's ICAO identifier. This one is for Crossville/Whitson Field in Tennessee. Every airport in the world that reports METARs has a four-letter identifying code (no numbers) where the first letter indicates the airport's region. Some examples: <b>K</b> - US mainland ; <b>P</b> - Alaska/Hawaii ; <b>C</b> - Canada ; <b>M</b> - Mexico/Caribbean ; <b>E</b> - Northern Europe ; <b>L</b> - Southern Europe.</li>
+                <li><span class="code"><b>282041Z</b></span>: The time the report was issued. The time is reported in Zulu time (aka military time) which is functionally identical to UTC. The numbers are broken in groups of two to give day-hour-minute. This one gives 28-20-41, which means it was issued (Dec) 28th at 20:41Z or 3:41 PM local time.</li>
+                <li><span class="code"><b>AUTO</b></span>: The report was automatically generated. Report was not human-generated or checked. Most common at smaller airports and airports without a tower.</li>
+                <li><span class="code"><b>34006KT</b></span>: The wind direction and speed. The numbers are read direction-speed; here that is 340-06. The direction is measured in true-north degrees which the wind is blowing from, and the speed is measured in knots. The speed may sometimes be followed by G##, which means that the wind is gusting up to some higher speed.</li>
+                <li><span class="code"><b>1 1/2SM</b></span>: The visibility in statute miles. The usual format looks like 6SM for six miles. Here it includes a fraction, so the visibility is 1.5 miles. This value will never be higher than 10SM, which we usually read as unlimited visibility.</li>
+                <li><span class="code"><b>BR</b></span>: The WX section. This section contains any significant weather events at or near the airport and is located between the visibility and cloud layers. It is not included if there are no weather events to report. The only event in this report is BR, which is code for Mist. Codes can be combined like +TSRA, which stands for heavy thunderstorms rain, or VCFC, which stands for vicinity funnel cloud. <a href="http://en.wikipedia.org/wiki/METAR#METAR_WX_codes" target="_blank">Click here for a full list of WX codes</a>.</li>
+                <li><span class="code"><b>OVC002</b></span>: The cloud layer section. This section contains all cloud layers directly above an airport. Each entry has a layer description and height in hundreds of feet AGL (above ground level). Here we have one layer which is overcast and 200 feet AGL. <a href="http://en.wikipedia.org/wiki/METAR#Cloud_reporting" target="_blank">Click here for a full list of cloud layer codes</a>.</li>
+                <li><span class="code"><b>08/07</b></span>: The surface temperature and dew point. All temperatures in aviation are in Celsius. The code is divided temp/dew. Here we have a temperature of 8&deg;C and a dew point of 7&deg;C. If either is in the negatives, there will be an 'M' before the number. The closer these two numbers are to each other, the lower the base cloud layer will be, and there will be a high chance of fog, mist, and low visibility. We can see each of these represented elsewhere in the report.</li>
+                <li><span class="code"><b>A3006</b></span>: The altimeter setting. This is the barometric pressure in inches of Mercury, the US standard, with the decimal point omitted. This is very important for pilots because air density affects every aspect of an aircraft's performance and is used to determine an aircraft altitude. Standard pressure (1 atm) is 29.92 inHg which is equivalent to the pressure at sea level at 15&deg;C. Here we have an altimeter setting of 30.06 inHG, so the air is more dense than standard.</li>
+                <li><span class="code"><b>RMK ...</b></span>: The remarks section. This is always the last section of a METAR if it is included and contains any extra information about the reporting station or detailed info on the weather reported. The first remark here is <b>A02</b>, which tells us the station is automated and has a sensor which can differentiate between rain and snow (stations without this sensor appear as A01). The second remark, <b>T00830067</b> , gives of a more detailed temp/dew reading. Here the detailed temperature is 8.3&deg;C and dew point is 6.7&deg;C. Other items you might find in this section include times a WX event began, the amount of rain that has fallen, and if the station requires maintenance.</li>
+            </ul>
+        </div>
+        
+        <div>
+            <a name="Setup"></a>
+            <h2>RasPi Setup <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>If you haven't read it yet, <a href="../../Blog/Raspberry-Pi/Initial-Setup.html">go here to read my post on setting up a Raspberry Pi for IoT</a>. That will get you most of the way there.</p>
+            <p>All you need to do to use the LCD Plate is download <a href="https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code" target="_blank">Adafruit's Raspberry Pi Python Library</a>; just type <span class="code">git clone https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code</span> in the terminal in your home directory and then copy mplate.py and mlogic.py into <span class="code">Adafruit-Raspberry-Pi-Python-Code/Adafruit_CharLCDPlate/</span>. If you are using the PiTFT display, Adafruit has made an iso (<a href="https://learn.adafruit.com/adafruit-pitft-28-inch-resistive-touchscreen-display-raspberry-pi/easy-install" target="_blank">Resistive</a>/<a href="https://learn.adafruit.com/adafruit-2-8-pitft-capacitive-touch/easy-install" target="_blank">Capacitive</a>) with the screen drivers and software ready to run. Note: the link goes to a tutorial for the resistive touchscreen.</p>
+        </div>
+        
+        <div>
+            <a name="Logic"></a>
+            <h2>METAR Logic <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>The METAR-RasPi project is broken up based on the display hardware and a shared set of functions; this shared set is found in mlogic.py . For anyone wishing to create their own METAR-based project, start with these two functions.</p>
+            <p>First, <span class="code">getMETAR(station)</span> takes a station identifier string, like <span class="code">'KJFK'</span>, and returns a string containing the station's METAR report. It does this by fetching a webpage from aviationweather.gov and extracting just the report. If it can't find the report, be it the station doesn't exist, there's no report within the last eight hours, or they changed the webpage layout, the function will return a zero. This can be used in Python with an <span class="code">if</span> statement since non-empty strings are read as <span class="code">True</span> and zeros are read as <span class="code">False</span>.</p>
+            <p>Second, <span class="code">parseMETAR(txt)</span> takes the report string returned by <span class="code">getMETAR</span> and returns a dictionary of labelled report values with the following keys: Station, Time, Wind-Direction, Wind-Speed, Wind-Gust, Visibility, Altimeter, Temperature, Dewpoint, Cloud-List, Other-List, Remarks. Every key corresponds to a string except for Cloud-List and Other-List which are lists of strings. If the report is incomplete, the keys affected will point to an empty string or an empty list. The parse function only organizes the report; it does not translate it. This means things like a negative temperature will still be expressed as <span class="code">'M05'</span>.</p>
+            <p>There are other useful functions which translate WX data, determine the station's flight rules, and determine the ceiling from the Cloud-List.</p>
+        </div>
+        
+        <div>
+            <a name="Plate"></a>
+            <h2>METAR Plate <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Pni-CPXJ2RM" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+            <p>The first display this program was designed for was the <a href="https://www.adafruit.com/product/1110">Adafruit RGB Negative 16x2 LCD</a>. It has a 16x2 LCD char display, RGB backlight, and five interface buttons, and it fits snugly on the Raspberry Pi's GPIO pins. Given that the data we want to display is already a formatted line of text, this is the most basic way to do that. However, we can use the buttons and backlight to provide additional functionality.</p>
+            <p>Creating a display with some static variables, in this case a station ID, is fairly straightforward. However, allowing the user to change the station while the program is running requires a UI. With the plate, this means using those five buttons. They are arranged on the plate like a d-pad and select button, which leads to some obvious input choices like on the station id selection screen. Other choices, not so.</p>
+            <p>In order to write this program without having to use threading, the program checks for any button input at the end of each line scroll. If the select button is held down then, the station selection screen returns. If the right and left buttons are held at the same time (whether here or on the selection screen), the user is prompted if they want to turn off the Pi or exit the program; the option available is determined by a boolean in the file. If you want to create a closed system, ie run at boot and shutdown, make sure that <span class="code">shutdownOnExit</span> is set to <span class="code">True</span> and that mplate.py is set to run at boot. If you need help doing this, I have a <a href="#">blog post about what I always do when setting up a new RPi</a> (link soon to come), which includes how to setup an atBoot.sh file.</p>
+            <p>It's one thing to display some data; it's different, and more fun, to make sense of that data. Since we have already parsed the text, we can use the visibility and ceiling to determine the station's current flight rules. We use <span class="code">getFlightRules(vis , cld)</span> to do this. Here, <span class="code">vis</span> is just the value of Visibility. However, <span class="code">cld</span> must be the cloud ceiling. By definition, the ceiling is the lowest Broken (BKN) or Overcast (OVC) layer of clouds. For METARs, we also include Vertical Visibility (VV) in cases where the observer can't see the clouds like in heavy fog. We use the function <span class="code">getCeiling(clouds)</span> where <span class="code">clouds</span> is Cloud-List. Now we run <span class="code">getFlightRules</span> to get one of four possible flight conditions:</p>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-success"><b>VFR</b> : Visual Flight Rules - <b>Visibility > 5SM</b> and <b>Ceiling > 3000ft</b></li>
+                <li class="list-group-item list-group-item-info"><b>MVFR</b> : Marginal VFR - <b>5SM > Visibility > 3SM</b> and <b>3000ft > Ceiling > 1000ft</b></li>
+                <li class="list-group-item list-group-item-danger"><b>IFR</b> : Instrument Flight Rules - <b>3SM > Visibility > 1SM</b> and <b>1000ft > Ceiling > 500ft</b></li>
+                <li class="list-group-item list-group-item-native"><b>LIFR</b> : Low IFR - <b>Visibility < 1SM</b> and <b>Ceiling < 500ft</b></li>
+            </ul>
+            <p>The colors shown above are those which are commonly associated with each flight condition. We can use the RGB backlight to change the display color to communicate this without having to add any more text to the display. It also allows anyone to generalize what the weather is like without having to see any of the text.</p>
+            <p>Note: the plate does not display the remarks section by default. It generally is not as useful as the rest of the report and would add too much extra text to the scrolling line, sometimes tripling its length. If you want to enable this, set the value of <span class="code">includeRemarks</span> to <span class="code">True</span>.</p>
+        </div>
+        
+        <div>
+            <a name="Screen"></a>
+            <h2>METAR Screen <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>Many of my projects start out with me saying "Ok, what haven't I really used in a project yet." That led to using the plate above but also my first real attempt at a screen UI. In keeping with the small form factor, the new interface was designed for the <a href="https://www.adafruit.com/product/1601">Adafruit 320x240 PiTFT display</a>. You can see a demonstration video at the top of the page. Some UI elements carried over from the plate, like the METAR selection screen, while others were infeasible, like the flight rules backlight, which became only that element's text color. That being said, the clear advantages of using the screen over the plate are having more potential inputs and being able to display much more information.</p>
+            <p>With the plate, the only input options were combinations of those five hardware buttons. With the screen, we can place inputs anywhere we want&hellip;or nowhere at all. Two sections of the METAR, WX and Remarks, are always of variable length and may not be included at all. To work with this and save space on the main display, both have been given their own screen which is accessible by a dynamic button just above the settings button. The appearance changes depending on the available data, so it will say "WX", "RMK", "WX/RMK", or not appear at all. Now that this data can take up the entire screen, we can expand it. Since there are a finite number of WX codes, it's easy to translate each combination using <span class="code">translateWX(wx)</span> from the mlogic.py library. For simplicity's sake, we leave the remarks alone.</p>
+            <p>Rather than just display text, we can create graphics to more effectively communicate the METAR data. The best example of this is the cloud layer height that takes over the right side of the display. It shows a graph of all the cloud layers relative to themselves and the ground with the top of the graph being 8,000ft. If the highest layer is above 8,00ft, that becomes the new top and the rest of the layers scale accordingly. The METAR's text is still the same, but now the user can better visualize what that data means.</p>
+            <p>There are other value-add things we can do. Because we've already parsed the data, each item can be displayed and labelled by itself. Rather than displaying 36010G14KT, it's trivial to break it out as 360&deg;, 10kts, and 14kt gusts. The temperature and dew point can be used to calculate the humidity.</p>
+        </div>
+        
+        <div>
+            <a name="Resources"></a>
+            <h2>Resources <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p><a href="https://aviationweather.gov">Aviation Weather Center - <i>aviationweather.gov</i></a></p>
+        </div>
+        
+    </article>
+    
+    <footer>
+    </footer>
+    
+</body>
+
+</html>

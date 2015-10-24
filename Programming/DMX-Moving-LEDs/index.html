@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://mdupont.com">
+
+<head>
+    <!--META-->
+    <title>MduP DMX Moving LEDs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:600' rel='stylesheet' type='text/css'>
+    
+    <!--SCRIPT-->
+</head>
+
+<body>
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B6F45" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B6F45');</script>
+    <!-- End Google Tag Manager -->
+    
+    <nav id="topnav" class="navbar">
+        <div class="container">
+            <div class="row">
+                <ol class="breadcrumb pull-left">
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Programming</a></li>
+                    <li class="active">DMX Moving LEDs</li>
+                </ol>
+                <ul class="nav nav-pills pull-right">
+                    <!--<li><a href="#">About</a></li>-->
+                    <li><a href="../../about.html">About / Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="subnav">
+        <div class="container">
+            <h4>Michael duPont - mdupont.com</h4>
+        </div>
+    </div>
+    
+    <article class="container">
+        <h1 id="title-bar">DMX Moving LEDs</h1>
+        
+        <div id="taboc">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" class="active"><a href="#taboc" name="taboc" id="def-color">Contents</a></li>
+                <li role="presentation"><a href="#Materials">Materials</a></li>
+                <li role="presentation"><a href="#DMX">What Is DMX 512</a></li>
+                <li role="presentation"><a href="#Circuit">The Circuitry</a></li>
+                <li role="presentation"><a href="#Enclosure">The Enclosure</a></li>
+                <li role="presentation"><a href="#Resources">Resources</a></li>
+            </ul>
+        </div>
+        
+        <div id="header" class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="img-leveler">
+                    <img src="../img/DMXHold.jpg" class="img-responsive" alt="Responsive image">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <a href="https://github.com/flyinactor91/DMXMovingLEDs" target='_blank' id="link-block">
+                    <div>
+                        <h1>GitHub</h1>
+                    </div>
+                </a>
+                <a href="#" title="Coming Soon" target='_blank' id="link-block">
+                    <div>
+                        <h1>Get the Kit</h1>
+                    </div>
+                </a>
+                <h2>Overview</h2>
+                <h4>This project uses an Arduino to control the movement, color, and brightness of an 8x8 NeoPixel panel via DMX 512 and a DMX shield.</h4>
+            </div>
+        </div>
+        
+        <div>
+            <div class="alert alert-info" style="margin-top:20px; margin-bottom:0px">
+                <p><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> GitHub merges are welcome from anyone who improves the servo control, redesigns and adds support for stepper motors, or adds really cool example effects</p>
+            </div>
+        </div>
+        
+        <div>
+            <a name="Materials"></a>
+            <h2>Materials <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <div class="list-group">
+                <a href="http://store.arduino.cc/index.php?main_page=product_info&cPath=11&products_id=195" target="_blank" class="list-group-item">1 - Arduino Uno</a>
+                <a href="https://www.tindie.com/products/Conceptinetics/dmx-shield-for-arduino-remote-device-management-capable/" target="_blank" class="list-group-item">1 - Conceptinetics DMX Shield</a>
+                <a href="http://www.adafruit.com/product/1487" target="_blank" class="list-group-item">1 - Adafruit 8x8 NeoPixel Matrix</a>
+                <a href="http://www.adafruit.com/products/155" target="_blank" class="list-group-item">2 - Standard 180&deg; Servos with Standard Double-Sided Horns</a>
+                <a href="https://www.servocity.com/html/long_double_arm__futm1980_.html" target="_blank" class="list-group-item">2 - Standard 180&deg; Long Double Servo Arms (sometimes included with servo)</a>
+                <a href="http://www.adafruit.com/products/65" target="_blank" class="list-group-item">1 - Mini Breadboard</a>
+                <div class="list-group-item">
+                    <p>Multiple - Assorted Male and Female Jumper Cables</p>
+                    <ul style="padding-left:0px">
+                        <li style="display:inline">Male/Male: <a href="http://www.adafruit.com/products/1956" target="_blank" class="label label-default">&nbsp;3"&nbsp;</a> <a href="http://www.adafruit.com/products/1957" target="_blank" class="label label-default">&nbsp;6"&nbsp;</a> <a href="http://www.adafruit.com/products/1955" target="_blank" class="label label-default">&nbsp;12"&nbsp;</a> <a href="http://www.adafruit.com/products/153" target="_blank" class="label label-default">&nbsp;Bundle&nbsp;</a></li>
+                        <li style="display:inline">Female/Female: <a href="http://www.adafruit.com/products/1950" target="_blank" class="label label-default">&nbsp;6"&nbsp;</a> <a href="http://www.adafruit.com/products/1949" target="_blank" class="label label-default">&nbsp;12"&nbsp;</a></li>
+                    </ul>
+                </div>
+                <a href="http://www.adafruit.com/product/63" target="_blank" class="list-group-item">1 - 9V DC Power Adapter</a>
+                <a href="http://www.adafruit.com/product/62" target="_blank" class="list-group-item">1 - USB Cable (Standard A-B)</a>
+                <div class="list-group-item">1 - 300&#8486; - 500&#8486; Resistor</div>
+                <div class="list-group-item">1 - Large Capacitor (1000 µF, 6.3V or higher)</div>
+            </div>
+            <h4>You will also need the following</h4>
+            <div class="list-group">
+                <div class="list-group-item">Access to a 3D Printer</div>
+                <div class="list-group-item">A DMX Control Board (or any other device that can output DMX)</div>
+                <div class="list-group-item">DMX Cable</div>
+                <div class="list-group-item">Soldering Iron and Solder (only for header pins of NeoPixel Matrix)</div>
+            </div>
+        </div>
+        
+        <div>
+            <a name="DMX"></a>
+            <h2>What Is DMX 512 <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>DMX stands for Digital Multiplex and is the standard used in theatrical lighting to control dimmers and moving lights. The 512 stands for the number of channels supported by each set of connected devices, called a universe. We call them channels rather than lights because complex lighting instruments require more than one channel to operate. This means each universe can go from being able to control 512 individual lights to just a few dozen. For this reason, most high-end boards can control multiple universes.</p>
+            <p>First, a slight detour; let's talk about colors and computers. There are three primary colors of light <span class="btn-group btn-group-xs" role="group" style="letter-spacing:1px"><span class="btn btn-danger"><b>Red</b></span><span class="btn btn-success"><b>Green</b></span><span class="btn btn-info"><b>Blue</b></span></span> which can be combined to form any other color of light (this isn't entirely true, but let's say that it is for the sake of simplicity). Most displays support a method called 24-bit "True Color" which assigns an 8-bit Byte to each primary color per pixel. This gives us a value range of 0 to 255 (2^8 or 256 possibilities) where 0 is off and 255 is full bright. Since light is additive, unlike pigments and gels which are subtractive, having all three colors set to 255 gives the appearance of white light while all three set to 0 is black. Every other combination gives us some color value. This has become the basic way we represent color in code. Here are some examples; I've included the hexadecimal representation which is very closely related to 24-bit.</p>
+            <div class="row center-text" style="letter-spacing:1px">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <p><span class="btn-group btn-group-xs" role="group"><span class="btn btn-danger"><b>204</b></span><span class="btn btn-success"><b>153</b></span><span class="btn btn-info"><b>255</b></span></span> = <span class="btn-group btn-group-xs"><span class="btn btn-default" style="background-color:#C9F;color:#FFF;border-color:#666"><b>#CC99FF</b></span></span></p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <p><span class="btn-group btn-group-xs" role="group"><span class="btn btn-danger"><b>71</b></span><span class="btn btn-success"><b>173</b></span><span class="btn btn-info"><b>144</b></span></span> = <span class="btn-group btn-group-xs"><span class="btn btn-default" style="background-color:#47AD90;color:#FFF;border-color:#666"><b>#47AD90</b></span></span></p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <p><span class="btn-group btn-group-xs" role="group"><span class="btn btn-danger"><b>247</b></span><span class="btn btn-success"><b>227</b></span><span class="btn btn-info"><b>74</b></span></span> = <span class="btn-group btn-group-xs"><span class="btn btn-default" style="background-color:#F7E34A;color:#FFF;border-color:#666"><b>#F7E34A</b></span></span></p>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <p><span class="btn-group btn-group-xs" role="group"><span class="btn btn-danger"><b>247</b></span><span class="btn btn-success"><b>190</b></span><span class="btn btn-info"><b>232</b></span></span> = <span class="btn-group btn-group-xs"><span class="btn btn-default" style="background-color:#F7BEE8;color:#FFF;border-color:#666"><b>#F7BEE8</b></span></span></p>
+                </div>
+            </div>
+            <p>Back to DMX. The formal description of DMX is that it is an "asynchronous serial digital data protocol." In other words, it can transmit values to any device in the connection chain without knowing anything about the devices themselves. A control board generates a DMX signal that contains some value on channel 15. Any device in the chain that is told to listen in to channel 15 will read that value while those that aren't told will read some other value. This means you can control multiple devices from a single channel without having to change the controller or programming. This also means that the controller will still transmit 512 channels even if only one channel is being used or the board can only control a hand-full of channels.</p>
+            <p>That covers the "asynchronous serial" part; now let's talk about the "digital data" part. By definition, digital data consists of signals that are either on or off. We generally represent this with 1's and 0's. When a control board generates a single DMX signal, known as a DMX packet, it creates a series of 1's and 0's which are broken down into a short header section and then 512 8-bit channel values. In other words, each channel is given a Byte with 256 possible unique values. It is up to the listening device to decide what to do with these values.</p>
+            <p>Traditionally, the go-to listening device is called a dimmer and is a specialized digital-to-analog converter, i.e. it is a digitally controlled potentiometer allowing more and more high voltage current through as the channel value increases. It acts as the intermediary to control the brightness of lamps (the theatrical equivalent of a light bulb) or the functionality of any other unintelligent appliance. Commonly, dimmers are used to read the value of multiple channels where the first channel is addressed and the rest are read sequentially. We generally refer these types of dimmers as racks. More and more so, however, traditional dimmers and racks are being replaced by smarter devices we call "intelligent fixtures" whose designs and uses vary wildly. Rather than try to cover specific devices, I'll give a brief overview of four common components of these fixtures. Keep in mind: each component must be controlled only using 256 possible values.</p>
+            <div class="row">
+                <div id="info-panels" class="col-sm-12 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">LEDs</div>
+                        <div class="panel-body">
+                            <!--<img src="../img/" class="img-responsive" alt="Responsive image">-->
+                            <p>Controlling LEDs via DMX is incredibly straightforward thanks to the way we already represent color digitally. As I talked about above, each RGB color is controlled by a Byte, so we can have one-to-one control. We assign each color to a channel and directly use that channel's value. In addition, we want to assign a fourth channel to easily control the LEDs' brightness without affecting the light's overall color. This is a bit trickier but can be done by applying a simple equation: <span class="code">V=C*B/255</span> where <span class="code">C</span> is the original color's channel value, <span class="code">B</span> is the brightness value, and <span class="code">V</span> is the value that is actually applied to the LED.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="info-panels" class="col-sm-12 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Motors</div>
+                        <div class="panel-body">
+                            <p>The secret to controlling motors via DMX is understanding value mapping. In short, it is a means of scaling some value range into another value range. For motors, we think of their position as degrees where one full revolution is 360&deg; from the starting point. With DMX, however, we need to change the scale so that one full revolution is 256&deg;. We use value mapping to convert a value in the 256-range so that it has the same relative position in the 360-range. You might also need to restrict a motor's range so a light doesn't hit its control unit. You'd do this by changing the mapping so that a 0-255 range is scaled to fit a 30-330 range.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="info-panels" class="col-sm-12 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Range</div>
+                        <div class="panel-body">
+                            <p>This method of control is like motors in that the channel value is mapped to some min and max position. For example, a light's lens (focus) can be moved in and out based on a channel's value between 0 and 255. Some lights control color using this method and glass plates. Each plate is made so that a beam of light passes through more and more color as the plate turns around its axis. Treat 0 as transparent, 255 as saturated, and rotate the plate in front of the beam of light. If you have a plate for each color (RGB or CMY), you can control color without using gels or LEDs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="info-panels" class="col-sm-12 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Assignment</div>
+                        <div class="panel-body">
+                            <p>Unlike range, assignment is either one-to-one or, more commonly, range-to one. As an example, interchangeable gobos in larger fixtures can be chosen by setting a channel to a certain value. If there are 50 gobos to choose from, each is assigned a range of five values; #1 gets 0-4, #2 gets 5-9, and so on. Values 250-255 could be interpreted as no gobo. An intelligent board would know to set the channel value in the middle of each range (2, 7, 13, ...) to allow for some buffer room. Effect channels also use assignment to allow a user to choose from several pre-made fixture effects.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>There are some limitations to DMX 512 that must always be considered, some of which have work-arounds. From the control board, up to 32 separate devices can be daisy-chained together where the last device terminates the DMX signal. If you need more than 32 devices, high-end boards support multiple universes, or you can use specialty DMX splitters to duplicate an incoming DMX signal. The other workable limitation is that DMX cables can't be longer than 4000ft due to signal degradation, though the recommendation is not to use cables longer than 1000ft. If you really need that distance, DMX repeaters act as a pass-through device to boost the signal but count against that 32 device limit.</p>
+            <p>There is one last limitation that I need to talk about, and it is important enough to deserve the following warning.</p>
+            <div class="alert alert-danger"><b><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> DMX 512 has no means of error checking! It cannot be used in triggering pyrotechnics, automation, or any other application which requires precision as to not put any person or audience in harm's way.</b></div>
+            <p>Most of our modern information protocols have some form of error checking to prevent (or at least ignore) anomalies, like high-energy rays from the Sun, from flipping bits in transit over the cables. Since DMX 512 has no way to check if a channel value has been altered en route, a device could read a value that is off by 128 with only one altered bit. Normally, we can overlook such things because these devices are constantly reading in values and people are not endangered by a light quickly flickering on and off. The issue comes when someone tries using DMX for such things as a triggering mechanism. As I said, a single flipped bit can alter a channel's value by up to 128, making trigger-by-range very easy to fire at the wrong time. Even if the trigger was a single value, there's still the slim possibility that it will fire early. For this very reason, DMX is not allowed to control anything that could put people in harm's way, especially pyrotechnics. Pyrotechnics and automation have their own protocols and devices, and it's best to keep all of these systems separate. Nothing can replace a seasoned stage manager and crew.</p>
+        </div>
+        
+        <div>
+            <a name="Circuit"></a>
+            <h2>The Circuitry <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <img src="../img/DMXMovLEDs_bb.png" class="img-responsive" alt="Responsive image">
+            </div>
+            <p>The circuitry for this project is fairly simple when connecting everything with a breadboard. As with most of my projects, I design them so that no soldering is involved beyond setting the breadboard pins in place. In other words, this project can be taken apart and every component reusable. There are a few things of note when wiring according to the diagram. First, the DMX shield sits on top of the Arduino, so all of the wires plug into it. Second, you can test the circuitry in any configuration you want, but you will still need to wire up every component in place in the enclosure to make sure all of the wires can reach the Arduino. Last, do not apply power to the LED matrix without the resistor and capacitor in place. The capacitor prevents power fluctuations in the LEDs, which both protects the electronics and prevents the LEDs' brightness from flickering.</p>
+            <p>A few notes about programming the light. By default, the Arduino listens to channels one through six. Right now, these values need to be changed in the code. Therefore, I have left the USB port on the Arduino accessible from the enclosure. However, because of the way the DMX shield operates, you need to alter one of the dip switches on the shield itself before applying power. The top switch (EN) enables and disables power to the shield. When connected to a compter for programming, the switch needs to connect the right-most pins (the side with the ~). When operating the light (ie powered by the AC adapter), the switch needs to connect the left-most pins. Also, the shield requires serial communications to operate, so testing using <span class="code">Serial.println()</span> statements will not work.</p>
+        </div>
+        
+        <div>
+            <a name="Enclosure"></a>
+            <h2>The Enclosure <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p>The body for this project is divided into three sections with seven or eight pieces depending on how the LED matrix is secured. Each piece in the photos here were printed on a Makerbot 2 with PLA filament. Most of the pieces are flat and rectangular, which easily warps. To minimize the warping effects, each STL file includes the corner-circle-method. Each piece is printed with extremely short circles in each corner. When printed with (and subsequently removed with) a raft, the majority of the warping is absorbed by these circles and kept away from the piece. When the print is done, the circles are removed along with the raft. There is similar functionality built into the Makerware software, but my circles are far less intrusive being only one layer high, effectively just increasing the size of the raft. For those who wish to use other methods, I have included the raw <a href="http://www.blender.org" target="_blank">Blender</a> files so a version can be made without the circles. The only piece that needs to be printed with supports is the main body enclosure due to the wide openings.</p>
+            <p>A few notes about piecing the arm together. The arm has three main pieces: the center and the two vertical. The vertical with the servo horn groove should have that groove facing inward so the horn rests in it with the connector pointed back towards the servo. The other vertical should have the protruded circle pointing inwards for the panel to pivot on. I'd recommend using some glue to keep the verticals connected to the center. The center piece should also have its groove pointed towards the panel. The center servo horn is placed in backwards so that the arm is still supported when hanging upside down. To prevent the arm from falling out of place when the arm is on top, there is a piece in the shape of the horn to prevent it from moving around. I've found that friction between the layers of plastic are enough to keep it in place, so no glue is necessary here.</p>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/1overview.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>An overview of the enclosure with the arm pieced together and circuitry hooked up. I have two extra wires not shown in the circuit diagram because I used analog feedback servos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/2servo.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The tilt servo is placed in the panel without the horn attached (same for the other servo). When placing the horn on, make sure that the full range of motion goes from parallel to parallel relative to the arm. This same concept should be done with the pan servo so that the range of motion is a half-sphere with the controller housing positioned at the xy plane.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/3wirehole.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The wires must be fed through this hole in the arm one at a time. I suggest doing some light braiding once they run along the outside of the arm to keep them close together. You can also see the mounting holes for the LED matrix. The matrix sits flush on these pillars and the servo body itself.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/4ledmatrix.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Depending on how secure you need the matrix to be, it can be secured using screws or by a plastic square which runs along the outside of the matrix. Depending on the quality of the print, the friction of this piece is usually enough to lock it down.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/5place1.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Once the panel and pan servo are in place and wired up, we can place the Arduino and DMX shield. Start by placing the metal locking pin on the shield through its opening in the enclosure.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/6place2.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Then the board can level out and sit flat on its outer supports. Make sure that all the wires coming up from the base are not in the way. They could prevent the board from sitting flat, or you could strip the wire coating by trying the force the board flat.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/7support.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The Arduino should rest on the lower ledge of the supports on the side where the wires are coming up.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/8board.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The miniature breadboard fits in on top next to the shield's dip switches. Depending on the size of your capacitor, you might need to bend it. Take care that the capacitor leads do not make contact with any of the shield's exposed components. Capacitors can store a lot of energy and release it instantly zapping any other electronics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/9cover.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>The cover slides on with the longer supports on the wire side. As when placing the board, make sure no wires are in the way of the supports when placing the cover on. Any force may strip or cut the wires.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="well well-list">
+                        <div class="img-thumbnail">
+                            <img src="img/10lock.jpg" class="img-responsive" alt="Responsive image">
+                        </div>
+                        <div class="caption">
+                            <p>Once the cover is all the way on, the Arduino and DMX shield should be locked in place thanks to the top and bottom supports. The only components that can move now are the arm and the panel as a whole. The holes on both side of the body are meant the connect with standard-size C-clamps like most lighting instruments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <a name="Resources"></a>
+            <h2>Resources <a href="#taboc"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" id="totop"></span></a></h2>
+            <p><a href="http://www.elationlighting.com/pdffiles/dmx-101-handbook.pdf" target="_blank">A DMX 512 Handbook - <i>http://www.elationlighting.com/pdffiles/dmx-101-handbook.pdf</i></a></p>
+            <p><a href="http://www.makerbot.com/blog/2013/04/19/keep-corners-flat-with-makerwares-helper-discs/" target="_blank">The Corner Circle Method - <i>http://www.makerbot.com/blog/2013/04/19/keep-corners-flat-with-makerwares-helper-discs/</i></a></p>
+        </div>
+        
+    </article>
+    
+    <footer>
+    </footer>
+    
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+/*	common320.css
+Made by Michael duPont
+320 Pixel Layout Style Sheet (iPhone)
+Extends common.css
+Primary Scheme:
+	1435AD  Main
+	2C3E82	Dark Dull
+	071D70	Dark Full
+	4867D6	Light Full
+	6E84D6	Light Dull
+Specials:
+	313B61	Header Text
+*/
+
+#Background
+{
+	display : none;
+}
+
+#BackgroundHeader
+{
+	display : none;
+}
+
+#wrap
+{
+	width : 100%;
+}
+
+#TitleBar
+{
+	height : 100px;
+	left : 0;
+	position : absolute;
+	top : 0;
+	width : 320px;
+}
+
+#Title
+{
+	left : 15px;
+	top : 14px;
+	width : 249px;
+	font-size : 34px;
+}
+
+#SubTitle
+{
+	left : 15px;
+	top : 63px;
+	width : 128px;
+	font-size : 21px;
+}
+
+Nav
+{
+	height : 120px;
+	left : 0px;
+	position : absolute;
+	top : 99px;
+	width : 320px;
+}
+
+Nav li
+{
+	display : inline;
+}
+
+Nav li a
+{
+	font-size : 16px;
+	line-height : 40px;
+}
+
+Article
+{
+	left : -8px;
+	top : 211px;
+	width : 90%;
+	padding : 0px 15px 0px 15px;
+}

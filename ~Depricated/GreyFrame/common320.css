@@ -1,0 +1,131 @@
+#wrap
+{
+	width : 320px;
+	margin : 0 auto;
+	
+}
+
+#TitleBar
+{
+	height : 120px;
+	left : 0px;
+	overflow : hidden;
+	position : absolute;
+	top : 0px;
+	width : 320px;
+	background-color : #dadada;
+	border-color : #878787;
+	border-style : solid;
+	border-width : 1px;
+
+}
+
+#Title
+{
+	height : 43px;
+	left : 15px;
+	overflow : hidden;
+	position : absolute;
+	top : 18px;
+	width : 249px;
+	color : #575756;
+	font-family : Arial,sans-serif;
+	font-size : 36px;
+	line-height : 43px;
+	margin-top : 0;
+	width : 100%;
+
+}
+
+#Title a
+{
+	color : #575756;
+	text-decoration : none;
+
+}
+
+#SubTitle
+{
+	height : 26px;
+	left : 15px;
+	overflow : hidden;
+	position : absolute;
+	top : 71px;
+	width : 128px;
+	color : #575756;
+	font-family : Arial,sans-serif;
+	font-size : 22px;
+	line-height : 26px;
+	margin-top : 0;
+	width : 100%;
+
+}
+
+#SubTitle a
+{
+	color : #575756;
+	text-decoration : none;
+
+}
+
+#NavBar
+{
+	height : 120px;
+	left : 0px;
+	overflow : hidden;
+	position : absolute;
+	top : 121px;
+	width : 322px;
+	list-style : none;
+	margin : 0;
+	padding : 0;
+
+}
+
+#NavBar li
+{
+	background-color : #878787;
+	display : inline;
+
+}
+
+#NavBar li a
+{
+	background : #878787;
+	color : white;
+	float : left;
+	font-family : Arial,sans-serif;
+	font-size : 16px;
+	height : 32.500%;
+	line-height : 40px;
+	padding : 0px 0;
+	text-align : center;
+	text-decoration : none;
+	white-space : nowrap;
+	width : 100.000%;
+
+	border-bottom : 1px solid black;
+}
+
+#NavBar li a:hover
+{
+	background : black;
+	 color : white;
+
+}
+
+#Content
+{
+	height : 500px;
+	left : 0px;
+	overflow : hidden;
+	position : absolute;
+	top : 240px;
+	width : 300px;
+	background-color : #dadada;
+	border-color : #878787;
+	border-style : solid;
+	border-width : 1px;
+	padding : 0px 10px 0px 10px;
+
+}
