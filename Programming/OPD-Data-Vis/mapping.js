@@ -132,9 +132,9 @@ function draw(data) {
 			};
 			
 			//Set the date options to the date being shown
-			d3.select('#opt-year-field').attr('value' , year);
-			d3.select('#opt-month-field').attr('value' , month);
-			d3.select('#opt-day-field').attr('value' , day);
+			document.getElementById('opt-year-field').value = year;
+			document.getElementById('opt-month-field').value = month;
+			document.getElementById('opt-day-field').value = day;
 			
 			//Display the number of points on the map for each category in the legend
 			for (var category in fillColors) {
