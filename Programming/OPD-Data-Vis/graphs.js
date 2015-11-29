@@ -58,7 +58,7 @@ function pad2(num) {
 //dates is a list containing data keys to limit the iteration scope
 //Ex: [] for years, ['2012','3'] for days in March 2012
 function formatGraphData(dates) {
-	//Make the dte prefix, ex ['2012','3'] -> '2012-3-'
+	//Make the date prefix, ex ['2012','3'] -> '2012-3-'
 	var dateprefix = '';
 	for (var i in dates) {
 		dateprefix = dateprefix + dates[i] + '-';
@@ -109,7 +109,7 @@ function draw(data, xFormat, xDisplay) {
 		myChart.assignColor(cat, fillColors[cat]);
 	}
 	
-	//Update title and back button
+	//Update title, back button, bar width, and x-axis range
 	var title = 'Dispatches by ';
 	var titleDate = data[0].Date.split('-');
 	var graphType = titleDate.length - 1;
@@ -174,13 +174,82 @@ function draw(data, xFormat, xDisplay) {
 	})
 }
 
-//Set maindata and draw the year overview graph
-function main(data) {
-	maindata = data
-	draw(formatGraphData([]), '%Y', '%Y')
+//Capitalizes the first char of a string
+function caps(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-d3.json('data/opdbins.json', main);
+function animation(data, group) {
+	//Filter data
+	var subdata = [];
+	if (group != 'all') {
+		for (var i in data) {
+			if (data[i].Category == group) {
+				subdata.push(data[i]);
+			}
+		}
+	} else {
+		subdata = data;
+	}
+	
+	//Remove previous chart
+	d3.select('#graph').selectAll('*').remove();
+	
+	//Create and place the svg object
+	var svg = dimple.newSvg('#graph', width + margin, height + margin);
+	
+	//Build new chart
+	var myChart = new dimple.chart(svg, subdata);
+	//Add axis data
+	var x = myChart.addTimeAxis('x', 'Date', '%H', '%I');
+	myChart.addMeasureAxis('y', 'Dispatches');
+	//Add ordered stacked bars
+	var s = myChart.addSeries(['Order', 'Category'], dimple.plot.bar);
+	s.addOrderRule('Order');
+	s.categoryFields = ['Category'];
+	//Assign category colors
+	for (var cat in fillColors) {
+		myChart.assignColor(cat, fillColors[cat]);
+	}
+	
+	//Update title, bar width, and x-axis range
+	d3.select('#graph-title h2').text(caps(group) + ' Dispatches by Hour');
+	x.floatingBarWidth = (window.innerWidth - margin * 2) / 44;
+	var d = new Date('1900-01-01T00:00:00');
+	x.overrideMin = d3.time.hour.offset(d, -1);
+	x.overrideMax = d3.time.day.offset(d, 1);
+	x.title = 'Hour';
+	
+	//Draw chart
+	myChart.draw(1000);
+}
 
-//http://jsfiddle.net/farrukhsubhani/S6FLv/7/
-//http://jsfiddle.net/mkzTk/2/
+//Play animation then interactive graph
+d3.json('data/opdanim.json', function(animdata) {
+	maindata = animdata
+	animdata = formatGraphData([])
+	var animationSteps = ['violent', 'nonviolent', 'transport', 'oncall', 'other', 'all'];
+	var i = 0;
+	
+	animation(animdata, 'all');
+	debugger;
+	
+	var interval = setInterval(function() {
+		if (i >= animationSteps.length) {
+			debugger;
+			clearInterval(interval);
+			debugger;
+			//Set maindata and draw the year overview graph
+			d3.json('data/opdbins.json', function(drawdata) {
+				debugger;
+				maindata = drawdata;
+				document.getElementById('instructions').style.display = 'block';
+				draw(formatGraphData([]), '%Y', '%Y');
+			});
+		} else {
+			var group = animationSteps[i];
+			animation(animdata, group);
+			i++;
+		}
+	}, 3000);
+});
