@@ -6,6 +6,12 @@
 
 This visualization is a continuation of my OPD-EDA report. It allows readers to explore the entire dataset within a series of summary charts for an overview of the data and an interactive Google Map to explore its individual values.
 
+## Story
+
+The first part of the visualization shows the number of dispatches by category by hour. It first shows the categories stacked, then individually, then stacked again. The reader is shown that there is anomalous data at 5PM and 6PM and that it affects most of the categories. I offer a possible explanation for this on the page in a block-quote from my EDA.
+
+The visualiztions then continues to the interactive portion where the reader can graphically view the number of dispatches by year, month, and day. This allows the reader to get an open-ended, high-level overview of the data. Clicking on a particular day sends the reader to an interactive map displaying the dispatches for that day adding yet another dimension to the reader's exploration.
+
 ## Design
 
 I knew I wanted to make a map visualization; I wanted to expand the capabilities of the heatmaps I made durring the EDA. I also wanted to make it work on mobile/small screens. One piece of feedback I recieved recommended adding popovers with event details. However, I decided against it because popovers require more space on mobile without including another library like Bootstrap. This also lead the choice to toggle elements in the header to increase the map size while the user is interacting with it.
@@ -14,7 +20,7 @@ I originally tested with one month of data. I knew I couldn't ask readers to dow
 
 I decided to use solid-fill, colored points on the map that were just large enough so they could easily be touched on a phone screen but small enough that they didn't obscure the map behind it. The map provides the perceptual strength of an xy coordinate system within the 1:1 context of places in the real world. Using color as the categorization encoding allows the map to feel more organized than using something else like shape. I made the deliberate choice to use red for violent crimes, which meant not using green in the color scheme.
 
-After additional feedback, I decided to add a new visualization the would funnel readers to a particular day on the map. I decided to use the categorization bar charts I made during the EDA. However, these are interactive. I made a new datafile that contained bin counts for every date in the dataset. This allowed me to start with a stacked bar chart of bin counts by year. Clicking on a bar redraws the chart of bin counts by months in that year, which then goes by day in that month. Once a reader clicks a particular day, the map gets loaded displaying the dispatches for the selected day.
+After additional feedback, I decided to add a new visualization that acts as a funnel so that readers can make an informed choice as to which day they want to display on the map. I decided to use the categorization bar charts I made during the EDA. However, these are interactive. I made a new datafile that contained bin counts for every date in the dataset. This allowed me to start with a stacked bar chart of bin counts by year. Clicking on a bar redraws the chart of bin counts by months in that year, which then goes by day in that month. Once a reader clicks a particular day, the map gets loaded displaying the dispatches for the selected day.
 
 I decided to use a stacked bar chart (rather than side-by-side) because it would allow the reader to compare the time-period's total dispatches. The tooltip still allows the reader to see the bin count for a specific category. I also made sure to use the same color scheme as the map.
 
@@ -61,12 +67,6 @@ I decided to use a stacked bar chart (rather than side-by-side) because it would
 
 "Make it easier to read by reducing the gap between years - having them so far apart makes it difficult to compare."
 - Bar width now adjusts to window width
-
-4. Perhaps list the top 5 reasons for each category during the mouse-over?  For example, if the mouseover is over "oncall", would be interesting to see if the top reason was "911 hangup"  
-
-5. Treat the categories as titles, and capitalize the first letter. "oncall" -> "On Call" , "violent" -> "Violant", etc
-
-6. May want to consider adding a decimal point to your Dispatch values in the mouse-over.  For example, 07/10 is 0k, but probably still makes up 5% of the overall dispatch total for the month.
 
 ## Future Plans
 
