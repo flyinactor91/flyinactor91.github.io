@@ -52,11 +52,8 @@
 	<div id='graph-header' class="container">
 		<div><button id='detail-toggle' onclick='toggleDetails()'>Hide additional info</button></div>
 		<div id='additional-details'>
-			<div>Explore the Orlando Police Dispatch records for dates ranging from 2009-05-09 to 2015-08-21. Bars show the number of dispatches broken down by the categories listed below.</div>
-			<div>Police dispatch activity tends to follow the activity curve of people during the day with the lowest point at 5AM and the highest in the evening. However, the hours of 5PM and 6PM buck this trend; we see a sudden drop at 5PM followed by an equally sudden increase at 6PM. We see this across every category except for "other" whose activity more closely aligns with the public school day. I believe that most likely explanation for this is "cops get stuck in traffic too". Here's my explanation from the EDA:</div>
-			<div id='block-quote'>The time associated with a police report is not when the incident actually happened; it’s when the report is filed, ie when the officer arrives at that location. The heaviest rush hour traffic starts around 5 PM when most people leave work. I believe that many of the 6 PM dispatches happened in the 5 PM block, but the traffic kept enough officers from getting to the site promptly. If you average both bars in the graph, they fit the arc we would expect to see.</div>
+			<div>Explore the Orlando Police Dispatch records for dates ranging from 2009-05-09 to 2015-08-21. Bars show the number of dispatches broken down by the categories listed below. Hovering over a section will display additional information. Clicking on a year or month bar will display a new chart with that time period. Clicking on a day will open a new page so you can explore that day's dispatches on a map.</div>
 			<div>For an exploatory analysis of this data, you can <a href='http://mdupont.com/Programming/OPD-EDA' target='_blank'>read my full report</a>.</div>
-			<div id='instructions' style='display: none;'>Hovering over a section will display additional information. Clicking on a year or month bar will display a new chart with that time period. Clicking on a day will open a new page so you can explore that day's dispatches on a map.</div>
 			<div id='legend'>
 				<div><h3>Legend</h3></div>
 				<div id='legend-violent'>

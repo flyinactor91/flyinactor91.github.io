@@ -37,8 +37,6 @@ d3.select('#legend-'+category+' svg')
 //Show/hide all info in the header except for the title and dispatch details
 function toggleDetails() {
 	var button = document.getElementById('detail-toggle');
-	debugger;
-	console.log(button.textContent.indexOf('Hide'));
 	if (button.textContent.indexOf('Hide') == 0) {
 		document.getElementById('additional-details').style.display = 'none';
 		button.textContent = 'Show additional info';
@@ -130,7 +128,6 @@ function draw(data, xFormat, xDisplay) {
 		x.overrideMax = d;
 		button.style('visibility', 'visible');
 		button.on('click', function() {
-			console.log('click');
 			draw(formatGraphData([]), '%Y', '%Y');
 		});
 	//The graph displays the days
@@ -138,14 +135,10 @@ function draw(data, xFormat, xDisplay) {
 		title += 'Day in ' + monthNames[parseInt(titleDate[1])-1] + ' ' + titleDate[0];
 		x.floatingBarWidth = (window.innerWidth - margin * 2) / 44;
 		var d = new Date(titleDate[0]+'-'+pad2(titleDate[1])+'-01T00:00:00');
-		console.log(d);
-		console.log(d3.time.day.offset(d, -1));
-		console.log(d3.time.month.offset(d, 1));
 		x.overrideMin = d3.time.day.offset(d, -1);
 		x.overrideMax = d3.time.month.offset(d, 1);
 		button.style('visibility', 'visible');
 		button.on('click', function() {
-			console.log('click');
 			draw(formatGraphData([titleDate[0]]), '%Y-%m', '%m');
 		});
 	}
@@ -174,82 +167,8 @@ function draw(data, xFormat, xDisplay) {
 	})
 }
 
-//Capitalizes the first char of a string
-function caps(string) {
-	return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function animation(data, group) {
-	//Filter data
-	var subdata = [];
-	if (group != 'all') {
-		for (var i in data) {
-			if (data[i].Category == group) {
-				subdata.push(data[i]);
-			}
-		}
-	} else {
-		subdata = data;
-	}
-	
-	//Remove previous chart
-	d3.select('#graph').selectAll('*').remove();
-	
-	//Create and place the svg object
-	var svg = dimple.newSvg('#graph', width + margin, height + margin);
-	
-	//Build new chart
-	var myChart = new dimple.chart(svg, subdata);
-	//Add axis data
-	var x = myChart.addTimeAxis('x', 'Date', '%H', '%I');
-	myChart.addMeasureAxis('y', 'Dispatches');
-	//Add ordered stacked bars
-	var s = myChart.addSeries(['Order', 'Category'], dimple.plot.bar);
-	s.addOrderRule('Order');
-	s.categoryFields = ['Category'];
-	//Assign category colors
-	for (var cat in fillColors) {
-		myChart.assignColor(cat, fillColors[cat]);
-	}
-	
-	//Update title, bar width, and x-axis range
-	d3.select('#graph-title h2').text(caps(group) + ' Dispatches by Hour');
-	x.floatingBarWidth = (window.innerWidth - margin * 2) / 44;
-	var d = new Date('1900-01-01T00:00:00');
-	x.overrideMin = d3.time.hour.offset(d, -1);
-	x.overrideMax = d3.time.day.offset(d, 1);
-	x.title = 'Hour';
-	
-	//Draw chart
-	myChart.draw(1000);
-}
-
-//Play animation then interactive graph
-d3.json('data/opdanim.json', function(animdata) {
-	maindata = animdata
-	animdata = formatGraphData([])
-	var animationSteps = ['violent', 'nonviolent', 'transport', 'oncall', 'other', 'all'];
-	var i = 0;
-	
-	animation(animdata, 'all');
-	debugger;
-	
-	var interval = setInterval(function() {
-		if (i >= animationSteps.length) {
-			debugger;
-			clearInterval(interval);
-			debugger;
-			//Set maindata and draw the year overview graph
-			d3.json('data/opdbins.json', function(drawdata) {
-				debugger;
-				maindata = drawdata;
-				document.getElementById('instructions').style.display = 'block';
-				draw(formatGraphData([]), '%Y', '%Y');
-			});
-		} else {
-			var group = animationSteps[i];
-			animation(animdata, group);
-			i++;
-		}
-	}, 3000);
+//Set maindata and draw the year overview graph
+d3.json('data/opdbins.json', function(drawdata) {
+	maindata = drawdata;
+	draw(formatGraphData([]), '%Y', '%Y');
 });
