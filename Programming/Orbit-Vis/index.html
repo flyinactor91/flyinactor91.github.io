@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<style>
+
+.settings > div {
+  border-style: solid;
+  border-width: 1px;
+  padding: 8px;
+}
+
+.calc > * {
+  padding: 8px;
+  margin-top: 8px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.settings * {
+  display: inline;
+}
+
+output {
+  margin: 0px, 10px;
+}
+
+path {
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.sphere,
+.graticule {
+  stroke: #aaa;
+}
+
+.orbit {
+  stroke: red;
+  stroke-width: 2px;
+}
+
+.equator {
+  stroke: blue;
+  stroke-width: 2px;
+  /*stroke-dasharray: 15;*/
+}
+
+.startingpoint {
+  stroke: black;
+  fill: #0a0;
+  stroke-width: 1px;
+}
+
+</style>
+<body>
+<div>
+    <h1>Visualizing Orbits</h1>
+    <ul>
+        <li><p><b>Why do satelite orbits look like a weird sine wave?</b></p></li>
+        <li><p><b>Why do satelites always orbit West to East?</b></p></li>
+        <li><p><b>Why do we want to launch rockets close to the equator?</b></p></li>
+    </ul>
+    <p>Experiment with the graphic below and see if your intuition matches with their explainations.</p>
+</div>
+<div class='settings'>
+    <div class='slider'>
+		<p>Initial Lat</p>
+        <input id='starts' type='range' min='-90' max='90' style='width:181px;'>
+        <output id='startn'></output>
+    </div>
+    <div class='slider'>
+		<p>Initial Heading</p>
+        <input id='headings' type='range' min='1' max='360' style='width:361px;'>
+        <output id='headingn'></output>
+    </div>
+	<!--<div>
+		<input id='animate' type='checkbox' checked></input>
+		<p>Animate</p>
+	</div>-->
+</div>
+<div class='calc'>
+	<p>Approx velocity savings: (465(m/s) * (1 - (abs(<span id='calc-lat'></span>) / 90))) * cos(<span id='calc-deg'></span>) = <b><span id='calc-ans'></span>(m/s)</b><br>A higher number equates to less fuel, less launch weight, and a cheaper rocket.</p>
+</div>
+<script src='js/d3.v3.min.js'></script>
+<script src='js/dms.js'></script>
+<script src='js/vector3d.js'></script>
+<script src='js/latlon-vectors.js'></script>
+<script>
+
+//Graphic dimentions
+var width = 960,
+    height = 500;
+
+//The start and final mapping projections
+var projection = interpolatedProjection(
+    d3.geo.orthographic()
+        .rotate([30, -10])
+        .center([-30, 10])
+        .scale(240)
+        .translate([width / 2, height / 2]),
+    d3.geo.equirectangular()
+        .scale(145)
+        .translate([width / 2, height / 2]));
+
+//Create basic graphic layers
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select('body').append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+svg.append('path')
+    .datum({type: 'Sphere'})
+    .attr('class', 'sphere')
+    .attr('d', path);
+
+svg.append('path')
+    .datum(graticule)
+    .attr('class', 'graticule')
+    .attr('d', path);
+
+//Assign variables for user inputs
+var starts = document.getElementById('starts');
+var startn = document.getElementById('startn');
+var headings = document.getElementById('headings');
+var headingn = document.getElementById('headingn');
+//var doanimate = document.getElementById('animate');
+
+//Update slider values and handlers
+starts.addEventListener('input', function() {
+	startn.innerHTML = starts.value;
+}, false);
+starts.addEventListener('change', update, false);
+headings.addEventListener('input', function() {
+	headingn.innerHTML = headings.value + '&deg;';
+}, false);
+headings.addEventListener('change', update, false);
+
+//The launch latitude
+var start = 30;
+//The launch direction
+var heading = 155;
+//The midpoint latitude
+var mid;
+
+//Set initial slider values
+starts.value = start;
+startn.innerHTML = start;
+headings.value = heading;
+headingn.innerHTML = heading + '&deg;';
+
+//Returns the latitude encountered after a quarter orbit
+function getMidpoint(hdg) {
+    //Since the path doesn't care about direction, we can simplify our calculations
+    if (hdg > 180) hdg = hdg - 180;
+	//These are simple to recognize
+    if (hdg == 90) return 0;
+    if (hdg == 180) return 90;
+	//Anything else must be calculated
+    var p1 = LatLon(start, 0), brng1 = hdg;
+    var p2 = LatLon(0, 90), brng2 = 360;
+    if (hdg > 90) brng2 = 180;
+    return LatLon.intersection(p1, brng1, p2, brng2).lat;
+}
+
+//Draw the orbital path
+var orbit = svg.append('path')
+    .attr('class', 'orbit')
+	.attr('id', 'orbit')
+    .attr('d', path);
+
+//Draw the equator
+svg.append('path')
+    .datum({type: 'LineString', coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
+    .attr('class', 'equator')
+    .attr('d', path);
+
+//Draw the longitude line of the starting point
+svg.append('path')
+    .datum({type: 'LineString', coordinates: [[0, -90], [0, 0], [0, 90]]})
+    .attr('class', 'equator')
+    .attr('d', path);
+
+//Draw the starting point
+var startp = svg.append('path')
+    .attr('class', 'startingpoint')
+	.attr('id', 'start')
+    .attr('d', path);
+
+var feature = svg.selectAll('path');
+
+//Calculate and update the velocity values
+function calculateVelocity() {
+	//Get our right triangle's angle from the launch heading's deviation from due East
+	var deg = 90 - heading % 180;
+	//Calculate by determining proportion of hypotenuse from lat and cos converting degrees into radians
+	var vel = (465 * (1-(Math.abs(start) / 90))) * Math.cos(deg * 0.0174533);
+	//Round to hundreths
+	vel = Math.round(vel * 100) / 100;
+	//Launching West means losing equal amount of eastwardly gains
+	if (heading > 180) vel = -vel;
+	document.getElementById('calc-lat').innerHTML = start;
+	document.getElementById('calc-deg').innerHTML = Math.abs(deg) + '&deg;';
+	document.getElementById('calc-ans').innerHTML = vel;
+}
+
+//Update the graphic and info when input changes
+function update() {
+	start = parseInt(starts.value);
+	heading = parseInt(headings.value);
+	mid = getMidpoint(heading);
+	orbit.datum({type: 'LineString', coordinates: [[-180, -start], [-90, -mid], [0, start], [90, mid], [180, -start]]});
+	startp.datum({type: 'MultiPoint', coordinates: [[0, start]]});
+	calculateVelocity();
+	animation();
+}
+
+//Run the initial animation on page load
+update();
+
+function animation() {
+  svg.transition()
+      .duration(7500)
+      .tween('projection', function() {
+        return function(_) {
+          projection.alpha(_);
+          feature.attr('d', path);
+        };
+      })
+    .transition()
+      .duration(5000)
+      .each('end', animation);
+}
+
+//Change the graphic's map and paths based on the current step between the two projections
+function interpolatedProjection(a, b) {
+  var projection = d3.geo.projection(raw).scale(1),
+      center = projection.center,
+      translate = projection.translate,
+      α;
+
+  function raw(λ, φ) {
+    var pa = a([λ *= 180 / Math.PI, φ *= 180 / Math.PI]), pb = b([λ, φ]);
+    return [(1 - α) * pa[0] + α * pb[0], (α - 1) * pa[1] - α * pb[1]];
+  }
+
+  projection.alpha = function(_) {
+    if (!arguments.length) return α;
+    α = +_;
+    var ca = a.center(), cb = b.center(),
+        ta = a.translate(), tb = b.translate();
+    center([(1 - α) * ca[0] + α * cb[0], (1 - α) * ca[1] + α * cb[1]]);
+    translate([(1 - α) * ta[0] + α * tb[0], (1 - α) * ta[1] + α * tb[1]]);
+    return projection;
+  };
+
+  delete projection.scale;
+  delete projection.translate;
+  delete projection.center;
+  return projection.alpha(0);
+}
+
+/*
+References:
+http://www.impressivewebs.com/onchange-vs-oninput-for-range-sliders/
+http://bl.ocks.org/mbostock/5731632
+http://www.movable-type.co.uk/scripts/latlong-vectors.html
+*/
+</script>
+
+<p><b>Why do satelite orbits look like a weird sine wave?</b></p>
+<p>Satelites don't actually orbit like a wave; all orbital motion can be modeled as an ellipse. The distortion is caused by mapping its orbit from a round body to a flat surface. The same sort of distortion can be seen on maps that depict Greenland as being larger than South America. You can see this in the graphic as the circular orbit gets flattened.</p>
+<p><b>Why do satelites always orbit West to East?</b></p>
+<p>Short answer: Because that's the direction the Earth rotates.</p>
+<p>Long answer: By taking advantage of our existing rotational speed, it takes less time and energy to get into orbit. At the equator, our rocket is already moving at 465 meters per second (m/s) just sitting on the ground. That's 465 m/s less that has to be produced by the rocket's engines. If we wanted to launch in the opposite direction (due West), the engines would have to produce an additional 930 m/s to both cancel out the Earth's rotation AND get it back up to our original but opposite speed.</p>
+<p>What's really cool is that every body in our solor system (planets, moons, asteroids, comets, etc) orbits West to East and every planet rotates West to East (except Uranus which is on a horizontal axis).</p>
+<p><b>Why do we want to launch rockets close to the equator?</b></p>
+<p>This is a two-fold answer.</p>
+<p>
+    <ul>
+        <li>First off, launching closer to the equator allows us to take greater advantage of the Earth's rotational momentum. If you set the direction to due East (90&deg;), the velocity savings decrease as the initial latitude moves away from the equator.</li>
+        <li>Secondly, it offers the greatest possible range of orbits. Because the Earth rotates below, a circular orbit (as depicted) is primarily characterized by its inclination (the angle of deflection between the equator and the orbit). Thus, the available orbits are limited by the range of inclinations determined by its launch latitude. By launching at the equator, we have access to the full range of inclinations which fall between 0&deg; and 90&deg;. Launching at 30'N limits this range to between 30&deg; and 90&deg;</li>
+    </ul>
+</p>
+<p>So why doesn't every country launch at the equator? Again this is a two-fold answer</p>
+<p>
+    <ul>
+        <li>First and foremost: politics. Because of things like national pride and sovereignty, countries will always prefer to launch within their own borders. However, they will still seek to make this location as close to the equator as possible. This is one of the primary reasons NASA launches most of its rockets from Florida. Even so, international projects, like the ISS, are put into higher than necessary inclinations so that they are accessable to more countries.</li>
+        <li>Sometimes, you just don't need access to those low inclination orbits. The US military launches many of its rockets from Vandenberg AFB in Central California. Survailance and mapping satelites are usually put into high inclination orbits (called polar orbits) because it allows them to orbit above a larger portion of the Earth's surface as the Earth rotates below them. Also, satelites launched into polar orbits do not benefit from the Earth's rotational momentum, so it matters less where they are launched from.</li>
+    </ul>
+</p>
+<p>Note: This graphic uses a perfectly circular orbit (constant altitude/speed) around a perfectly spherical Earth. In reality, the actual physics are a bit more complicated, but the underlying concepts are the same.</p>
+
+</body>
