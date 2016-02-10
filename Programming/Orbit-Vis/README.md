@@ -4,7 +4,7 @@
 
 ## Summary
 
-Orbital mechanics is a complicated area of physics, but many of its underlying concepts are fairly simple. This visualization attempts to demonstrate how the initial launch conditions determine a satelite's basic orbit.
+Orbital mechanics is a complicated area of physics, but many of its underlying concepts are fairly simple. This visualization attempts to demonstrate how the initial launch conditions determine a satellite's basic orbit.
 
 ## Story
 
@@ -31,6 +31,10 @@ Before I found my base visualization, I began designing how the reader could upd
 
 "Why can't I see the round orbit without changing the sliders?"
 - Animation now loops
+
+#### V2
+
+"that 2d projection of the orbit has always been pretty unintuitive … that unwrapping effect really helps"
 
 ## Resources
 
