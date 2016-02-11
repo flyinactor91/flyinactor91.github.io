@@ -36,6 +36,9 @@ Before I found my base visualization, I began designing how the reader could upd
 
 "that 2d projection of the orbit has always been pretty unintuitive … that unwrapping effect really helps"
 
+"wouldn't it be better if, in the case that the two lines overlap (red and blue), have the  red one visible instead of the blue one ?"
+- Rendering order fixed
+
 ## Resources
 
 In addition to MDN, w3s, and D3 documentation, the following sites were used:

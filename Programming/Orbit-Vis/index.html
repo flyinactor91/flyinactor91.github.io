@@ -165,12 +165,6 @@ function getMidpoint(hdg) {
     return LatLon.intersection(p1, brng1, p2, brng2).lat;
 }
 
-//Draw the orbital path
-var orbit = svg.append('path')
-    .attr('class', 'orbit')
-	.attr('id', 'orbit')
-    .attr('d', path);
-
 //Draw the equator
 svg.append('path')
     .datum({type: 'LineString', coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
@@ -181,6 +175,12 @@ svg.append('path')
 svg.append('path')
     .datum({type: 'LineString', coordinates: [[0, -90], [0, 0], [0, 90]]})
     .attr('class', 'equator')
+    .attr('d', path);
+
+//Draw the orbital path
+var orbit = svg.append('path')
+    .attr('class', 'orbit')
+	.attr('id', 'orbit')
     .attr('d', path);
 
 //Draw the starting point
@@ -287,8 +287,8 @@ http://www.movable-type.co.uk/scripts/latlong-vectors.html
 <p>So why doesn't every country launch at the equator? Again this is a two-fold answer</p>
 <p>
     <ul>
-        <li>First and foremost: politics. Because of things like national pride and sovereignty, countries will always prefer to launch within their own borders. However, they will still seek to make this location as close to the equator as possible. This is one of the primary reasons NASA launches most of its rockets from Florida. Even so, international projects, like the ISS, are put into higher than necessary inclinations so that they are accessable to more countries.</li>
-        <li>Sometimes, you just don't need access to those low inclination orbits. The US military launches many of its rockets from Vandenberg AFB in Central California. Survailance and mapping satellites are usually put into high inclination orbits (called polar orbits) because it allows them to orbit above a larger portion of the Earth's surface as the Earth rotates below them. Also, satellites launched into polar orbits do not benefit from the Earth's rotational momentum, so it matters less where they are launched from.</li>
+        <li>First and foremost: politics. Because of things like national pride and sovereignty, countries will always prefer to launch within their own borders. However, they will still seek to make this location as close to the equator as possible. This is one of the primary reasons NASA launches most of its rockets from Florida. Even so, international projects, like the ISS, are put into higher than necessary inclinations so that they are accessible to more countries.</li>
+        <li>Sometimes, you just don't need access to those low inclination orbits. The US military launches many of its rockets from Vandenberg AFB in Central California. Surveillance and mapping satellites are usually put into high inclination orbits (called polar orbits) because it allows them to orbit above a larger portion of the Earth's surface as the Earth rotates below them. Also, satellites launched into polar orbits do not benefit from the Earth's rotational momentum, so it matters less where they are launched from.</li>
     </ul>
 </p>
 <p>Note: This graphic uses a perfectly circular orbit (constant altitude/speed) around a perfectly spherical Earth. In reality, the actual physics are a bit more complicated, but the underlying concepts are the same.</p>
