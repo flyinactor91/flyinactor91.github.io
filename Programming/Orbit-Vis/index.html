@@ -1,6 +1,18 @@
 <!DOCTYPE html>
-<meta charset='utf-8'>
-<style>
+<html lang="en" xmlns="https://mdupont.com">
+
+<head>
+    <!--META-->
+    <title>MduP Orbit Vis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link rel="icon" type="image/png" href="../../favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../../CSS/main.css" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:600' rel='stylesheet' type='text/css'>
+    <style>
 
 .settings > div {
   border-style: solid;
@@ -13,10 +25,6 @@
   margin-top: 8px;
   border-style: solid;
   border-width: 1px;
-}
-
-.settings * {
-  display: inline;
 }
 
 output {
@@ -50,10 +58,41 @@ path {
   stroke-width: 1px;
 }
 
-</style>
+    </style>
+    
+    <!--SCRIPT-->
+</head>
+
 <body>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5B6F45" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B6F45');</script>
+<!-- End Google Tag Manager -->
+<nav id="topnav" class="navbar">
+    <div class="container">
+        <div class="row">
+            <ol class="breadcrumb pull-left">
+                <li><a href="../../">Home</a></li>
+                <li><a href="../">Programming</a></li>
+                <li class="active">Orbit Vis</li>
+            </ol>
+            <ul class="nav nav-pills pull-right">
+                <!--<li><a href="#">About</a></li>-->
+                <li><a href="../../about.html">About / Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="subnav">
+    <div class="container">
+        <h4>Michael duPont - mdupont.com</h4>
+    </div>
+</div>
+
+<article class="container">
 <div>
-    <h1>Visualizing Orbits</h1>
+    <h1 id="title-bar">Visualizing Orbits</h1>
     <ul>
         <li><p><b>Why do satellite orbits look like a weird sine wave?</b></p></li>
         <li><p><b>Why do satellites always orbit West to East?</b></p></li>
@@ -62,15 +101,15 @@ path {
     <p>Experiment with the graphic below and see if your intuition matches with their explainations.</p>
 </div>
 <div class='settings'>
-    <div class='slider'>
-		<p>Initial Lat</p>
-        <input id='starts' type='range' min='-90' max='90' style='width:181px;'>
-        <output id='startn'></output>
+    <div class='slider col-sm-12 col-md-4'>
+		<p style="display: inline;">Initial Lat</p>
+        <input id='starts' type='range' min='-90' max='90' style='width:181px; display: inline;'>
+        <output id='startn' style="display: inline;"></output>
     </div>
-    <div class='slider'>
-		<p>Initial Heading</p>
-        <input id='headings' type='range' min='1' max='360' style='width:361px;'>
-        <output id='headingn'></output>
+    <div class='slider col-sm-12 col-md-8'>
+		<p style="display: inline;">Initial Heading</p>
+        <input id='headings' type='range' min='1' max='360' style='width:361px; display: inline;'>
+        <output id='headingn' style="display: inline;"></output>
     </div>
 	<!--<div>
 		<input id='animate' type='checkbox' checked></input>
@@ -78,8 +117,9 @@ path {
 	</div>-->
 </div>
 <div class='calc'>
-	<p>Approx velocity savings: (465(m/s) * (1 - (abs(<span id='calc-lat'></span>) / 90))) * cos(<span id='calc-deg'></span>) = <b><span id='calc-ans'></span>(m/s)</b><br>A higher number equates to less fuel, less launch weight, and a cheaper rocket.</p>
+	<p class='col-xs-12'>Approx velocity savings: (465(m/s) * (1 - (abs(<span id='calc-lat'></span>) / 90))) * cos(<span id='calc-deg'></span>) = <b><span id='calc-ans'></span>(m/s)</b><br>A higher number equates to less fuel, less launch weight, and a cheaper rocket.</p>
 </div>
+<div id='graphic'></div>
 <script src='js/d3.v3.min.js'></script>
 <script src='js/dms.js'></script>
 <script src='js/vector3d.js'></script>
@@ -107,7 +147,7 @@ var path = d3.geo.path()
 
 var graticule = d3.geo.graticule();
 
-var svg = d3.select('body').append('svg')
+var svg = d3.select('#graphic').append('svg')
     .attr('width', width)
     .attr('height', height);
 
@@ -230,7 +270,7 @@ function animation() {
         };
       })
     .transition()
-      .duration(5000)
+      .duration(7500)
       .each('end', animation);
 }
 
@@ -270,13 +310,13 @@ http://www.movable-type.co.uk/scripts/latlong-vectors.html
 */
 </script>
 
-<p><b>Why do satellite orbits look like a weird sine wave?</b></p>
-<p>satellites don't actually orbit like a wave; all orbital motion can be modeled as an ellipse. The distortion is caused by mapping its orbit from a round body to a flat surface. The same sort of distortion can be seen on maps that depict Greenland as being larger than South America. You can see this in the graphic as the circular orbit gets flattened.</p>
-<p><b>Why do satellites always orbit West to East?</b></p>
+<h3><b>Why do satellite orbits look like a weird sine wave?</b></h3>
+<p>Satellites don't actually orbit like a wave; all orbital motion can be modeled as an ellipse (or some other conic section). The distortion is caused by mapping its orbit from a round body to a flat surface. The same sort of distortion can be seen on maps that depict Greenland as being larger than South America. You can see this in the graphic as the circular orbit gets flattened.</p>
+<h3><b>Why do satellites always orbit West to East?</b></h3>
 <p>Short answer: Because that's the direction the Earth rotates.</p>
 <p>Long answer: By taking advantage of our existing rotational speed, it takes less time and energy to get into orbit. At the equator, our rocket is already moving at 465 meters per second (m/s) just sitting on the ground. That's 465 m/s less that has to be produced by the rocket's engines. If we wanted to launch in the opposite direction (due West), the engines would have to produce an additional 930 m/s to both cancel out the Earth's rotation AND get it back up to our original but opposite speed.</p>
 <p>What's really cool is that every body in our solor system (planets, moons, asteroids, comets, etc) orbits West to East and every planet rotates West to East (except Uranus which is on a horizontal axis).</p>
-<p><b>Why do we want to launch rockets close to the equator?</b></p>
+<h3><b>Why do we want to launch rockets close to the equator?</b></h3>
 <p>This is a two-fold answer.</p>
 <p>
     <ul>
@@ -292,5 +332,7 @@ http://www.movable-type.co.uk/scripts/latlong-vectors.html
     </ul>
 </p>
 <p>Note: This graphic uses a perfectly circular orbit (constant altitude/speed) around a perfectly spherical Earth. In reality, the actual physics are a bit more complicated, but the underlying concepts are the same.</p>
+
+</article>
 
 </body>
